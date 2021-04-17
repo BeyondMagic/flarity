@@ -3,19 +3,20 @@
  **********************************************************************************/
 
 
-static char *font    =   "Fira Code:style=Regular:pixelsize=12:antialias=true:autohint=true";
+/*static char *font      = "Fira Code:style=Regular:pixelsize=12:antialias=true:autohint=true";
+
+static char *font2[] = {
+
+  "Hack:style=Regular:pixelsize=12:antialias=true:autohint=true",
+
+};*/
+
+static char *font    = "Fira Code:pixelsize=12";
 static char *font2[] = {
 
   "Hack:style=Regular:pixelsize=12:antialias=true:autohint=true",
 
 };
-
-/*static char *font    = "Hack:style=Regular:pixelsize=12:antialias=true:autohint=true";
-static char *font2[] = {
-
-  "Fira Code:style=Regular:pixelsize=12:antialias=true:autohint=true",
-
-};*/
 
 
 /**********************************************************************************
@@ -26,7 +27,7 @@ static char *font2[] = {
 static int borderpx  = 17;
 static float cwscale = 1.0;
 static float chscale = 1.125;
-float alpha = 0.92;
+float alpha          = 0.95;
 
 
 /**********************************************************************************
@@ -40,14 +41,11 @@ float alpha = 0.92;
 
 
 static char *shell = "/bin/sh";
-char *utmp = NULL;
-
-/* scroll program: to enable use a string like "scroll" */
-char *scroll = NULL;
 char *stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
-
-/* identification sequence returned in DA and DECID */
 char *vtiden = "\033[?6c";
+
+char *utmp = NULL;
+char *scroll = NULL;
 
 
 /**********************************************************************************
@@ -157,33 +155,36 @@ unsigned int tabspaces = 2;
  * Appereance
  **********************************************************************************/
 
+
+
+
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
-  "#000000", /* black   */
-  "#444444", /* red     */
-  "#4AE678", /* green   */
-  "#ffffff", /* yellow  */
-  "#9BA7D1", /* blue    */
-  "#EE79C3", /* magenta */
-  "#445782", /* cyan    */
-  "#B7B6BA", /* white   */
+  "#323033", /* black   */
+  "#EC5E66", /* red     */
+  "#009900", /* green   */
+  "#FAC863", /* yellow  */
+  "#6699CC", /* blue    */
+  "#D75F86", /* magenta */
+  "#357CD5", /* cyan    */
+  "#FDFCFD", /* white   */
 
   /* 8 bright colors */
-  "#575B70", /* black   */
-  "#CD2C3D", /* red     */
-  "#5AF78E", /* green   */
-  "#ffffff", /* yellow  */
-  "#E1CBE0", /* blue    */
-  "#A8C8EA", /* magenta */
-  "#5883AB", /* cyan    */
-  "#D6D7DB", /* white   */
+  "#424043", /* black   */
+  "#EB3234", /* red     */
+  "#5CBF53", /* green   */
+  "#FAB42D", /* yellow  */
+  "#65D9EF", /* blue    */
+  "#FA74CE", /* magenta */
+  "#519FD1", /* cyan    */
+  "#FFFFFF", /* white   */
 
 	[255] = 0,
 
 	/* more colors can be added after 255 to use with DefaultXX */
-	"#111111",
-	"#ffffff",
-  "#111111",
+	[256] = "#111111",
+	[257] = "#ffffff",
+  [258] = "#111111",
 };
 
 
@@ -269,7 +270,7 @@ static MouseShortcut mshortcuts[] = {
  **********************************************************************************/
 
 /* Internal keyboard shortcuts. */
-#define MODKEY Mod1Mask
+#define MODKEY  Mod1Mask
 #define TERMMOD (ControlMask|ShiftMask)
 
 /**********************************************************************************
@@ -288,6 +289,13 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
+
+
+
+   /*******************************************************************************
+   * Make SHIFT ENABLED + Backspace normal
+   ********************************************************************************/
+//	{ ShiftMask,            XK_BackSpace,   ttysend,        {.s = "\033H"} },
 
    /*******************************************************************************
    * Zoom Terminal
@@ -462,7 +470,6 @@ static Key key[] = {
 	{ XK_Delete,        XK_ANY_MOD,     "\033[P",       -1,    0},
 	{ XK_Delete,        XK_ANY_MOD,     "\033[3~",      +1,    0},
 	{ XK_BackSpace,     XK_NO_MOD,      "\177",          0,    0},
-	{ XK_BackSpace,     Mod1Mask,       "\033\177",      0,    0},
 	{ XK_Home,          ShiftMask,      "\033[2J",       0,   -1},
 	{ XK_Home,          ShiftMask,      "\033[1;2H",     0,   +1},
 	{ XK_Home,          XK_ANY_MOD,     "\033[H",        0,   -1},

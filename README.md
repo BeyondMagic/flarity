@@ -14,7 +14,6 @@
 
 In order to build st you need the Xlib header files.
 
-
 <h3>Installation</h3>
 
 Edit config.mk to match your local setup (st is installed into
@@ -25,21 +24,8 @@ necessary as root):
 
     make clean install
 
+<h3>Fonts</h3>
 
-<h3>Running st</h3>
+This was configured with Fira Code and Hack as fallback.
 
-If you did not install st with make clean install, you must compile
-the st terminfo entry with the following command:
-
-    tic -sx st.info
-
-See the man page for additional details.
-
-<h3>Credits</h3>
-
-© 2019-2021 João Victor F. <koetemagie beyondmagic>
-
-
-## Please verify `github.com/beyondMagic/scripts`!
-
-DWM hasn't any external commands builtin than the simple MPC commands, which can be easily disabled, I use it with 
+## Please verify `github.com/beyondMagic/config`!
