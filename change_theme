@@ -49,7 +49,7 @@ origin=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 && pwd -P); cd $origin
 # Build our new theme :)
 [ $black ] && {
 
-  sed -r \
+  sed -ri \
     -e "s/\[0\] *= *\"#.*/[0] = \"$black\",/" \
     -e "s/\[1\] *= *\"#.*/[1] = \"$red\",/" \
     -e "s/\[2\] *= *\"#.*/[2] = \"$green\",/" \
@@ -69,9 +69,7 @@ origin=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 && pwd -P); cd $origin
     -e "s/\[256\] *= *\"#.*/[256] = \"$sel\",/" \
     -e "s/\[257\] *= *\"#.*/[257] = \"$selb\",/" \
     -e "s/\[258\] *= *\"#.*/[258] = \"$bg\",/" \
-    config.h > ./config.new
-
-  rm -rf config.h; mv config.new config.h
+    config.h
 
   doas -- make clean install
 
