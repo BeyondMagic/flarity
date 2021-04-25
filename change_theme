@@ -14,7 +14,7 @@ origin=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 && pwd -P); cd $origin
     black='#151515';   black_b='#121212'
       red='#995464';     red_b='#DC322F'
     green='#649954';   green_b='#859900'
-   yellow='#FAC863';  yellow_b='#B58900'
+   yellow='#966C16';  yellow_b='#B58900'
      blue='#546499';    blue_b='#268BD2'
   magenta='#895499'; magenta_b='#D33682'
      cyan='#549989';    cyan_b='#2AA198'

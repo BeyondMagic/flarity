@@ -163,7 +163,7 @@ static const char *colorname[] = {
   [0] = "#151515",
   [1] = "#995464",
   [2] = "#649954",
-  [3] = "#FAC863",
+  [3] = "#966C16",
   [4] = "#546499",
   [5] = "#895499",
   [6] = "#549989",
@@ -362,7 +362,7 @@ static uint ignoremod = Mod2Mask|XK_SWITCH_MOD;
  * world. Please decide about changes wisely.
  */
 static Key key[] = {
-	/* keysym           mask            string      appkey appcursor */
+  /* keysym           mask            string      appkey appcursor */
 	{ XK_KP_Home,       ShiftMask,      "\033[2J",       0,   -1},
 	{ XK_KP_Home,       ShiftMask,      "\033[1;2H",     0,   +1},
 	{ XK_KP_Home,       XK_ANY_MOD,     "\033[H",        0,   -1},
