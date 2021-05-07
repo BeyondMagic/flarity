@@ -1,11 +1,15 @@
 #!/usr/bin/env sh
 #
-# This will just change the theme of the config.h file
-# and then build it
+# DESCRIPTION:
+#   This will just change the theme of the config.h file
+#   and then build it.
 # 
-# Configure yourself the colours
+#   Configure yourself the colours.
 #
-# BeyondMagic © 2021
+# AUTHOR(s):
+#   BeyondMagic © 2021
+#
+# GPL © 2021
 
 origin=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 && pwd -P); cd $origin
 
@@ -27,9 +31,9 @@ origin=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 && pwd -P); cd $origin
 [ "$1" = 'black' ] && {
 
     black='#323033';   black_b='#424043'
-      red='#EC5E66';     red_b='#EB3234'
+      red='#EC5E66';     red_b='#ED2E62'
     green='#009900';   green_b='#5CBF53'
-   yellow='#FAC863';  yellow_b='#FAB42D'
+   yellow='#FAC863';  yellow_b='#F3D353'
      blue='#6699CC';    blue_b='#65D9EF'
   magenta='#D75F86'; magenta_b='#FA74CE'
      cyan='#357CD5';    cyan_b='#519FD1'

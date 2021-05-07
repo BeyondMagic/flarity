@@ -1,5 +1,10 @@
 /**********************************************************************************
+ * thinking in possible future patches:
+ *   https://pastebin.com/KMcCNxXT
+ *
  * Fonts
+ *
+ * TODO: Don't paste something if has image code, for example, PNG
  **********************************************************************************/
 
 
@@ -160,31 +165,31 @@ unsigned int tabspaces = 2;
 
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
-  [0] = "#151515",
-  [1] = "#995464",
-  [2] = "#649954",
-  [3] = "#966C16",
-  [4] = "#546499",
-  [5] = "#895499",
-  [6] = "#549989",
-  [7] = "#111111",
+  [0] = "#323033",
+  [1] = "#EC5E66",
+  [2] = "#009900",
+  [3] = "#FAC863",
+  [4] = "#6699CC",
+  [5] = "#D75F86",
+  [6] = "#357CD5",
+  [7] = "#FDFCFD",
 
   /* 8 bright colors */
-  [8] = "#121212",
-  [9] = "#DC322F",
-  [10] = "#859900",
-  [11] = "#B58900",
-  [12] = "#268BD2",
-  [13] = "#D33682",
-  [14] = "#2AA198",
-  [15] = "#000000",
+  [8] = "#424043",
+  [9] = "#ED2E62",
+  [10] = "#5CBF53",
+  [11] = "#F3D353",
+  [12] = "#65D9EF",
+  [13] = "#FA74CE",
+  [14] = "#519FD1",
+  [15] = "#FFFFFF",
 
 	[255] = 0,
 
 	/* more colors can be added after 255 to use with DefaultXX */
-	[256] = "#ffffff",
-	[257] = "#111111",
-  [258] = "#ffffff",
+	[256] = "#111111",
+	[257] = "#ffffff",
+  [258] = "#111111",
 };
 
 
@@ -228,8 +233,8 @@ static unsigned int mousebg = 0;
  **********************************************************************************/
 
 
-static unsigned int cols = 80;
-static unsigned int rows = 12;
+static unsigned int cols = 192;
+static unsigned int rows = 43;
 
 
 /*
@@ -293,9 +298,18 @@ static Shortcut shortcuts[] = {
 
 
    /*******************************************************************************
-   * Make SHIFT ENABLED + Backspace normal
+   * Delete words normally, change a different sequence
+   * This has to be used in a nvim & zsh with those mapped sequences
    ********************************************************************************/
-//	{ ShiftMask,            XK_BackSpace,   ttysend,        {.s = "\033H"} },
+
+
+//	{ ShiftMask,            XK_BackSpace, ttysend,        {.s = "\033[24;5~\033[23;5~"} },
+	{ ControlMask,          XK_BackSpace, ttysend,        {.s = "\033[24;5~\033[23;5~"} },
+
+// Select a full word on nvim
+//	{ ControlMask|ShiftMask,          XK_Left, ttysend,   {.s = "\033[21;5~\033[23;5~\033[24;5~"} },
+//	{ ControlMask|ShiftMask,          XK_Right, ttysend,  {.s = "\033[24;5~\033[23;5~"} },
+
 
    /*******************************************************************************
    * Zoom Terminal
@@ -306,7 +320,7 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Home,        zoomreset,      {.f =  0} },
 
    /*******************************************************************************
-   * Scroll
+   i* Scroll
    ********************************************************************************/
 
   { MODKEY,               XK_Up,          kscrollup,      {.i = +1} },
