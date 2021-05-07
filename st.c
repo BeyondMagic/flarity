@@ -2602,16 +2602,17 @@ tresize(int col, int row)
 
 	for (i = 0; i < HISTSIZE; i++) {
 		term.hist[i] = xrealloc(term.hist[i], term.maxCol * sizeof(Glyph));
-		for (j = mincol; j < col; j++) {
-			term.hist[i][j] = term.c.attr;
-			term.hist[i][j].u = ' ';
-		}
+//		for (j = mincol; j < col; j++) {
+//			term.hist[i][j] = term.c.attr;
+//			term.hist[i][j].u = ' ';
+//		}
 	}
 
 	/* resize each row to new width, zero-pad if needed */
 	for (i = 0; i < minrow; i++) {
 //		term.line[i] = xrealloc(term.line[i], col * sizeof(Glyph));
 //		term.alt[i]  = xrealloc(term.alt[i],  col * sizeof(Glyph));
+    term.hist[i] = xrealloc(term.hist[i], term.maxCol * sizeof(Glyph));
 		term.line[i] = xrealloc(term.line[i], term.maxCol * sizeof(Glyph));
 		term.alt[i]  = xrealloc(term.alt[i],  term.maxCol * sizeof(Glyph));
 	}
@@ -2622,6 +2623,7 @@ tresize(int col, int row)
 //		term.alt[i] = xmalloc(col * sizeof(Glyph));
 		term.line[i] = xmalloc(term.maxCol * sizeof(Glyph));
 		term.alt[i] = xmalloc(term.maxCol * sizeof(Glyph));
+    term.hist[i] = xmalloc(term.maxCol * sizeof(Glyph));
 	}
 	if (col > term.col) {
 		bp = term.tabs + term.col;
