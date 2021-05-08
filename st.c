@@ -118,6 +118,7 @@ typedef struct {
 	int row;      /* nb row */
 	int col;      /* nb col */
   int maxCol;
+//  int maxRow;
 	Line *line;   /* screen */
 	Line *alt;    /* alternate screen */
 	Line hist[HISTSIZE]; /* history buffer */
@@ -2561,10 +2562,14 @@ twrite(const char *buf, int buflen, int show_ctrl)
 void
 tresize(int col, int row)
 {
-	int i, j, pmc;
+	int i, j, pmc, pmr;
+
 	int minrow = MIN(row, term.row);
 	int mincol = MIN(col, term.col);
+
 	term.maxCol = MAX(col, pmc = term.maxCol);
+//  term.maxRow = MAX(row, pmr = term.maxRow);
+
 	int *bp;
 	TCursor c;
 
@@ -2582,26 +2587,30 @@ tresize(int col, int row)
 	for (i = 0; i <= term.c.y - row; i++) {
 		free(term.line[i]);
 		free(term.alt[i]);
+//		free(term.hist[i]);
 	}
 	/* ensure that both src and dst are not NULL */
 	if (i > 0) {
 		memmove(term.line, term.line + i, row * sizeof(Line));
 		memmove(term.alt, term.alt + i, row * sizeof(Line));
+		memmove(term.hist, term.hist + i, row * sizeof(Line));
 	}
 	for (i += row; i < term.row; i++) {
 		free(term.line[i]);
 		free(term.alt[i]);
+//    free(term.hist[i]);
 	}
 
 	/* resize to new height */
 	term.line = xrealloc(term.line, row * sizeof(Line));
-	term.alt  = xrealloc(term.alt,  row * sizeof(Line));
+	term.alt  = xrealloc(term.alt, row * sizeof(Line));
 	term.dirty = xrealloc(term.dirty, row * sizeof(*term.dirty));
 	term.tabs = xrealloc(term.tabs, col * sizeof(*term.tabs));
 
 
 	for (i = 0; i < HISTSIZE; i++) {
 		term.hist[i] = xrealloc(term.hist[i], term.maxCol * sizeof(Glyph));
+
 //		for (j = mincol; j < col; j++) {
 //			term.hist[i][j] = term.c.attr;
 //			term.hist[i][j].u = ' ';
@@ -2645,7 +2654,7 @@ tresize(int col, int row)
 	c = term.c;
 	for (i = 0; i < 2; i++) {
 		if (mincol < col && 0 < minrow) {
-//			tclearregion(mincol, 0, col - 1, minrow - 1);
+//		tclearregion(mincol, 0, col - 1, minrow - 1);
 			tclearregion(pmc, 0, col - 1, minrow - 1);
 		}
 		if (0 < col && minrow < row) {
