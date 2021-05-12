@@ -30,7 +30,7 @@ origin=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 && pwd -P); cd $origin
 
 [ "$1" = 'black' ] && {
 
-    black='#323033';   black_b='#424043'
+    black='#000020';   black_b='#424043'
       red='#EC5E66';     red_b='#ED2E62'
     green='#009900';   green_b='#5CBF53'
    yellow='#FAC863';  yellow_b='#F3D353'
@@ -39,7 +39,7 @@ origin=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 && pwd -P); cd $origin
      cyan='#357CD5';    cyan_b='#519FD1'
     white='#FDFCFD';   white_b='#FFFFFF'
 
-    bg='#111111'; sel='#111111'; selb='#ffffff'
+    bg='#111115'; sel='#111111'; selb='#ffffff'
 
 }
 

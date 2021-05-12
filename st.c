@@ -2568,7 +2568,7 @@ tresize(int col, int row)
 	int mincol = MIN(col, term.col);
 
 	term.maxCol = MAX(col, pmc = term.maxCol);
-//  term.maxRow = MAX(row, pmr = term.maxRow);
+//term.maxRow = MAX(row, pmr = term.maxRow);
 
 	int *bp;
 	TCursor c;
@@ -2593,7 +2593,7 @@ tresize(int col, int row)
 	if (i > 0) {
 		memmove(term.line, term.line + i, row * sizeof(Line));
 		memmove(term.alt, term.alt + i, row * sizeof(Line));
-		memmove(term.hist, term.hist + i, row * sizeof(Line));
+//		memmove(term.hist, term.hist + i, row * sizeof(Line));
 	}
 	for (i += row; i < term.row; i++) {
 		free(term.line[i]);
@@ -2621,7 +2621,7 @@ tresize(int col, int row)
 	for (i = 0; i < minrow; i++) {
 //		term.line[i] = xrealloc(term.line[i], col * sizeof(Glyph));
 //		term.alt[i]  = xrealloc(term.alt[i],  col * sizeof(Glyph));
-    term.hist[i] = xrealloc(term.hist[i], term.maxCol * sizeof(Glyph));
+//    term.hist[i] = xrealloc(term.hist[i], term.maxCol * sizeof(Glyph));
 		term.line[i] = xrealloc(term.line[i], term.maxCol * sizeof(Glyph));
 		term.alt[i]  = xrealloc(term.alt[i],  term.maxCol * sizeof(Glyph));
 	}
@@ -2632,7 +2632,7 @@ tresize(int col, int row)
 //		term.alt[i] = xmalloc(col * sizeof(Glyph));
 		term.line[i] = xmalloc(term.maxCol * sizeof(Glyph));
 		term.alt[i] = xmalloc(term.maxCol * sizeof(Glyph));
-    term.hist[i] = xmalloc(term.maxCol * sizeof(Glyph));
+//    term.hist[i] = xmalloc(term.maxCol * sizeof(Glyph));
 	}
 	if (col > term.col) {
 		bp = term.tabs + term.col;
