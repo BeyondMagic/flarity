@@ -241,6 +241,7 @@ static unsigned int mousebg = 0;
 
 static unsigned int cols = 192;
 static unsigned int rows = 43;
+//unsigned int const buffSize = 255;
 
 
 /*
