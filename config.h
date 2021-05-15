@@ -317,6 +317,8 @@ static Shortcut shortcuts[] = {
 //	{ ControlMask|ShiftMask,          XK_Left, ttysend,   {.s = "\033[21;5~\033[23;5~\033[24;5~"} },
 //	{ ControlMask|ShiftMask,          XK_Right, ttysend,  {.s = "\033[24;5~\033[23;5~"} },
 
+	{ ShiftMask,              XK_Return,      newterm,        {.i =  0} },
+
 
    /*******************************************************************************
    * Zoom Terminal
