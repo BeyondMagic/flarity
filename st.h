@@ -88,6 +88,7 @@ void redraw(void);
 //void tfulldirt(void);
 void draw(void);
 void newterm(const Arg *);
+void newfloatterm(const Arg *);
 
 void kscrolldown(const Arg *);
 void kscrollup(const Arg *);
@@ -138,6 +139,7 @@ extern char *vtiden;
 extern wchar_t *worddelimiters;
 extern int allowaltscreen;
 extern int allowwindowops;
+extern char *float_terminal;
 extern char *termname;
 extern unsigned int tabspaces;
 extern unsigned int defaultfg;

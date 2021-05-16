@@ -139,7 +139,9 @@ static int bellvolume = 0;
  **********************************************************************************/
 
 
-/* default TERM value */
+// lemme tell you that this is not useless and I find it lovely with a script that randomizes the geometry, ok
+char *float_terminal = "/home/magic/github/scripts/terminal/st";
+// default TERM value
 char *termname = "st-256color";
 
 
@@ -271,7 +273,8 @@ static MouseShortcut mshortcuts[] = {
 	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
 //	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
 	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
-//	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
+
+//	{ XK_ANY_MOD,           Button3, clipcopy,       {.i =  0} },
 
 	{ XK_ANY_MOD,           Button4, kscrollup,      {.i = +1} },
 	{ XK_ANY_MOD,           Button5, kscrolldown,    {.i = +1} },
@@ -318,6 +321,7 @@ static Shortcut shortcuts[] = {
 //	{ ControlMask|ShiftMask,          XK_Right, ttysend,  {.s = "\033[24;5~\033[23;5~"} },
 
 	{ ShiftMask,              XK_Return,      newterm,        {.i =  0} },
+	{ ShiftMask,              XK_BackSpace,   newfloatterm,   {.i =  0} },
 
 
    /*******************************************************************************

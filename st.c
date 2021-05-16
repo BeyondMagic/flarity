@@ -1085,7 +1085,6 @@ tswapscreen(void)
 	tfulldirt();
 }
 
-
 void
 newterm(const Arg* a)
 {
@@ -1096,6 +1095,20 @@ newterm(const Arg* a)
 	case 0:
 		chdir(getcwd_by_pid(pid));
 		execlp("st", "./st", NULL);
+		break;
+	}
+}
+
+void
+newfloatterm(const Arg* a)
+{
+	switch (fork()) {
+	case -1:
+		die("fork failed: %s\n", strerror(errno));
+		break;
+	case 0:
+		chdir(getcwd_by_pid(pid));
+		execlp(float_terminal, float_terminal, NULL);
 		break;
 	}
 }
