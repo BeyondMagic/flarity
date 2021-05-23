@@ -16,7 +16,7 @@ static char *font2[] = {
 
 };*/
 
-static char *font    = "Fira Code:pixelsize=12:antialias=true";
+static char *font    = "Fira Code:pixelsize=12.25:antialias=true";
 
 //static char *font    = "JetBrainsMono Nerd Font Mono:pixelsize=12.75:antialias=true";
 //static char *font    = "JetBrainsMono Nerd Font:pixelsize=12:antialias=true";
@@ -24,7 +24,7 @@ static char *font    = "Fira Code:pixelsize=12:antialias=true";
 static char *font2[] = {
 
 //  "Hack:style=Regular:pixelsize=12:antialias=true:autohint=true",
-  "Fira Code:pixelsize=12.5:antialias=true"
+  "Fira Code:pixelsize=12.25:antialias=true"
 
 };
 
@@ -33,12 +33,11 @@ static char *font2[] = {
  * Appereance
  **********************************************************************************/
 
-
 static int borderpx  = 17;
 static float cwscale = 0.875;
 //static float chscale = 1.125;
 static float chscale = 0.875;
-float alpha          = 0.975;
+float alpha          = 0.999;
 
 
 /**********************************************************************************
@@ -197,7 +196,7 @@ static const char *colorname[] = {
 	/* more colors can be added after 255 to use with DefaultXX */
 	[256] = "#111111",
 	[257] = "#ffffff",
-  [258] = "#111115",
+  [258] = "#0A0C11",
 };
 
 

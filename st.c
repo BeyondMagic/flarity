@@ -36,7 +36,7 @@
 #define CAR_PER_ARG   4
 #define STR_BUF_SIZ   ESC_BUF_SIZ
 #define STR_ARG_SIZ   ESC_ARG_SIZ
-#define HISTSIZE      2000
+#define HISTSIZE      1000
 
 /* macros */
 #define IS_SET(flag)		((term.mode & (flag)) != 0)
@@ -2695,12 +2695,12 @@ tresize(int col, int row)
 
 
 	for (i = 0; i < HISTSIZE; i++) {
-		term.hist[i] = xrealloc(term.hist[i], col * sizeof(Glyph));
+	  term.hist[i] = xrealloc(term.hist[i], col * sizeof(Glyph));
 
-  		for (j = mincol; j < col; j++) {
-    		term.hist[i][j] = term.c.attr;
-    		term.hist[i][j].u = ' ';
-      }
+  	  for (j = mincol; j < col; j++) {
+	    term.hist[i][j] = term.c.attr;
+	    term.hist[i][j].u = ' ';
+	  }
 	}
 
 	/* resize each row to new width, zero-pad if needed */

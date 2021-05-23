@@ -39,7 +39,7 @@ origin=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 && pwd -P); cd $origin
      cyan='#357CD5';    cyan_b='#519FD1'
     white='#FDFCFD';   white_b='#FFFFFF'
 
-    bg='#111115'; sel='#111111'; selb='#ffffff'
+    bg='#0A0C11'; sel='#111111'; selb='#ffffff'
 
 }
 
