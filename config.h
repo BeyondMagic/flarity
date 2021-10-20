@@ -37,7 +37,7 @@ static int borderpx  = 17;
 static float cwscale = 0.875;
 //static float chscale = 1.125;
 static float chscale = 0.875;
-float alpha          = 0.999;
+float alpha          = 0.925;
 
 
 /**********************************************************************************
@@ -101,12 +101,12 @@ static double maxlatency = 33;
  * blinking timeout (set to 0 to disable blinking) for the terminal blinking
  * attribute.
  */
-static unsigned int blinktimeout = 800;
+static unsigned int blinktimeout = 600;
 
 /*
  * thickness of underline and bar cursors
  */
-static unsigned int cursorthickness = 2;
+static unsigned int cursorthickness = 3;
 
 
 /**********************************************************************************
@@ -229,7 +229,7 @@ static unsigned int defaultrcs = 257;
  **********************************************************************************/
 
 
-static unsigned int cursorshape = 6;
+static unsigned int cursorshape = 5;
 static unsigned int mouseshape = XC_xterm;
 static unsigned int mousefg = 7;
 static unsigned int mousebg = 0;
