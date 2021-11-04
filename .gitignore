@@ -1,3 +1,7 @@
 .ccls-cache
-/st
-/*.o
+st
+st.o
+x.o
+boxdraw.o
+hb.o
+st-unpatched
