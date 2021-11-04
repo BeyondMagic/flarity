@@ -210,7 +210,6 @@ static void tdumpline(int);
 static void tdump(void);
 static void tclearglyph(Glyph *, int);
 static void tclearregion(int, int, int, int, int);
-static void icursor(int);
 static void tresetcursor(void);
 static void tdeletechar(int);
 static void tdeleteline(int);
@@ -431,10 +430,10 @@ base64dec(const char *src)
 		in_len += 4 - (in_len % 4);
 	result = dst = xmalloc(in_len / 4 * 3 + 1);
 	while (*src) {
-		int a = base64_digits[(uchar) base64dec_getc(&src)];
-		int b = base64_digits[(uchar) base64dec_getc(&src)];
-		int c = base64_digits[(uchar) base64dec_getc(&src)];
-		int d = base64_digits[(uchar) base64dec_getc(&src)];
+		int a = base64_digits[(unsigned char) base64dec_getc(&src)];
+		int b = base64_digits[(unsigned char) base64dec_getc(&src)];
+		int c = base64_digits[(unsigned char) base64dec_getc(&src)];
+		int d = base64_digits[(unsigned char) base64dec_getc(&src)];
 
 		/* invalid input. 'a' can be -1, e.g. if src is "\n" (c-str) */
 		if (a == -1 || b == -1)
@@ -938,7 +937,6 @@ ttywrite(const char *s, size_t n, int may_echo)
 	const char *next;
 
 	kscrolldown(&((Arg){ .i = term.scr }));
-
 	if (may_echo && IS_SET(MODE_ECHO))
 		twrite(s, n, 1);
 
@@ -1033,7 +1031,7 @@ ttyresize(int tw, int th)
 }
 
 void
-ttyhangup(void)
+ttyhangup()
 {
 	/* Send SIGHUP to shell */
 	kill(pid, SIGHUP);
@@ -3140,7 +3138,6 @@ draw(void)
 		cx--;
 
 	drawregion(0, 0, term.col, term.row);
-	if (!term.scr)
     xdrawcursor(cx, term.c.y, term.line[term.c.y][cx],
 			term.ocx, term.ocy, term.line[term.ocy][term.ocx],
 			term.line[term.ocy], term.col);

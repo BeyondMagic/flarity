@@ -155,7 +155,6 @@ extern char *vtiden;
 extern wchar_t *worddelimiters;
 extern int allowaltscreen;
 extern int allowwindowops;
-extern int resettitleonris;
 extern char *float_terminal;
 extern char *termname;
 extern unsigned int tabspaces;

@@ -1,4 +1,3 @@
-back
 .ccls-cache
-st
-*.o
+/st
+/*.o
