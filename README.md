@@ -37,6 +37,12 @@ In order to build st you need the Xlib header files.
 
 This was configured with Fira Code and Hack as callback.
 
+Try it first with:
+
+```
+patch -p1 -i column-rows-patch-st-with-liga-box-hist.diff
+```
+
 <h3>Installation</h3>
 
 Edit config.mk to match your local setup (st is installed into
