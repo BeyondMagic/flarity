@@ -1252,7 +1252,7 @@ kscrollup(const Arg* a)
 }
 
 void
-newterm(const Arg* a)
+newterm(const Arg* arg)
 {
 	switch (fork()) {
 	case -1:
@@ -1260,21 +1260,7 @@ newterm(const Arg* a)
 		break;
 	case 0:
 		chdir(getcwd_by_pid(pid));
-		execlp("st", "./st", NULL);
-		break;
-	}
-}
-
-void
-newfloatterm(const Arg* a)
-{
-	switch (fork()) {
-	case -1:
-		die("fork failed: %s\n", strerror(errno));
-		break;
-	case 0:
-		chdir(getcwd_by_pid(pid));
-		execlp(float_terminal, float_terminal, NULL);
+		execlp(arg->v, arg->v, NULL);
 		break;
 	}
 }

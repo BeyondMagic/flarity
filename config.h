@@ -321,8 +321,8 @@ static Shortcut shortcuts[] = {
 //	{ ControlMask|ShiftMask,          XK_Left, ttysend,   {.s = "\033[21;5~\033[23;5~\033[24;5~"} },
 //	{ ControlMask|ShiftMask,          XK_Right, ttysend,  {.s = "\033[24;5~\033[23;5~"} },
 
-	{ ShiftMask,              XK_Return,      newterm,        {.i =  0} },
-	{ ShiftMask,              XK_BackSpace,   newfloatterm,   {.i =  0} },
+  { ShiftMask,            XK_BackSpace,   newterm,        {.v = "st_float"} },
+  { ShiftMask,            XK_Return,      newterm,        {.v ="st"} },
 
 
    /*******************************************************************************
