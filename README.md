@@ -1,6 +1,6 @@
 <h1 align="center">st - simple terminal</h1>
 
-<img align="center" src="preview.png">
+<img align="center" src="/.github/preview.png">
 
 <p align="center">st is a simple terminal emulator for X which sucks less.</p>
 

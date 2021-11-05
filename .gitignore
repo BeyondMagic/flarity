@@ -4,5 +4,5 @@ st.o
 x.o
 boxdraw.o
 hb.o
-st-unpatched-columns
-st-unpatched-newfloat
+patches/st-unpatched-columns
+patches/st-unpatched-newfloat
