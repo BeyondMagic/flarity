@@ -139,7 +139,7 @@ static int bellvolume = 0;
 
 
 // lemme tell you that this is not useless and I find it lovely with a script that randomizes the geometry, ok
-char *float_terminal = "/home/magic/github/scripts/terminal/st";
+char *float_terminal = "st_float";
 // default TERM value
 char *termname = "st-256color";
 
