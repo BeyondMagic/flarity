@@ -1,3 +1,7 @@
+From: beyondmagic <koetemagie@gmail.com>
+Date: Tue, 04 Nov 2021
+Subject: [PATCH] Patch to open a new terminal with the same path.
+[CUSTOM] specify command.
 diff --git a/config.def.h b/config.def.h
 index 6f05dce..4d3a822 100644
 --- a/config.def.h
