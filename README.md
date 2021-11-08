@@ -6,15 +6,13 @@
 
 ### Keybinds
 
-+ **Normal** scroll with mouse and `Alt+Up` and `Alt+Down`
-+ Bigger scroll with `Alt+PageUp` and `Alt+PageDown`
-+ Paste `Ctrl+Shift+V`
-+ Copy `Ctrl+Shift+C` | TODO: copy with the middle button of mouse
-+ When resizing to smaller size, the terminal won't clear the columns | TODO: do the same thing for rows
-+ `Shift+Enter` opens a new terminal in the same path
++ **Normal** scroll with mouse and `Alt+Up` and `Alt+Down`;
++ Bigger scroll with `Alt+PageUp` and `Alt+PageDown`;
++ `Ctrl+Shift+V` to paste text;
++ `Ctrl+Shift+C` or `Middle Button of Mouse` copies the selected text;
++ `Shift+Enter` opens a new terminal in the same path;
 + `Shift+Backspace` opens a new floating terminal in the same path, you should change the variable path to the st with floating title.
-	- [Script that I'm using](https://github.com/BeyondMagic/scripts/blob/master/terminal/st)
-+ `Middle Button of Mouse` copies the selected text
+	- [Script that I'm using](https://github.com/BeyondMagic/scripts/blob/master/terminal/st_float);
 + `Shift + Middle Button of Mouse` pastes copied text
 + `CTRL+Backspace` returns `F36+F35` sequence, I use this on **nvim** and **zsh**. It's preferable compared to 
 	- `noremap! <F36><F35> <C-w>` nvim
@@ -33,6 +31,7 @@
 + [newterm](https://st.suckless.org/patches/newterm/) [custom](https://github.com/BeyondMagic/st/blob/master/patches/newterm_custom_argument.patch)
 + [any geometry](https://st.suckless.org/patches/anygeometry/)(https://st.suckless.org/patches/anygeometry/)
 + [vertcenter](https://st.suckless.org/patches/vertcenter/)
++ [undercurl](https://st.suckless.org/patches/undercurl/)
 
 ### Support
 
@@ -45,12 +44,9 @@
 
 In order to build st you need the Xlib header files.
 
-
 ### Fonts
 
-This was configured with Fira Code and Hack as callback.
-
-Try it first with:
+This was configured with Fira Code and Material Design Iconic 2 fonts.
 
 ### Installation<
 

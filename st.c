@@ -1426,6 +1426,7 @@ csiparse(void)
 			v = -1;
 		csiescseq.arg[csiescseq.narg++] = v;
 		p = np;
+		readcolonargs(&p, csiescseq.narg-1, csiescseq.carg);
 		if (*p != ';' || csiescseq.narg == ESC_ARG_SIZ)
 			break;
 		p++;

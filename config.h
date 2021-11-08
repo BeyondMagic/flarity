@@ -23,8 +23,8 @@ static char *font    = "Fira Code:pixelsize=12.25:antialias=true";
 
 static char *font2[] = {
 
-//  "Hack:style=Regular:pixelsize=12:antialias=true:autohint=true",
-  "Fira Code:pixelsize=12.25:antialias=true"
+  "Material-Design-Iconic-Font:style=Design-Iconic-Font:antialias=true:pixelsize=12.25",
+  "Fira Code:pixelsize=12.25:antialias=true",
 
 };
 
@@ -620,3 +620,27 @@ static char ascii_printable[] =
 	" !\"#$%&'()*+,-./0123456789:;<=>?"
 	"@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
 	"`abcdefghijklmnopqrstuvwxyz{|}~";
+
+/**
+ * Undercurl style. Set UNDERCURL_STYLE to one of the available styles.
+ *
+ * Curly: Dunno how to draw it *shrug*
+ *  _   _   _   _
+ * ( ) ( ) ( ) ( )
+ *	 (_) (_) (_) (_)
+ *
+ * Spiky:
+ * /\  /\   /\	/\
+ *   \/  \/	  \/
+ *
+ * Capped:
+ *	_     _     _
+ * / \   / \   / \
+ *    \_/   \_/
+ */
+// Available styles
+#define UNDERCURL_CURLY 0
+#define UNDERCURL_SPIKY 1
+#define UNDERCURL_CAPPED 2
+// Active style
+#define UNDERCURL_STYLE UNDERCURL_SPIKY
