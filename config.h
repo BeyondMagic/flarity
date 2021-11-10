@@ -38,6 +38,7 @@ static float cwscale = 0.875;
 //static float chscale = 1.125;
 static float chscale = 0.875;
 float alpha          = 0.925;
+static int ligatures = 1;
 
 
 /**********************************************************************************
@@ -220,16 +221,26 @@ static unsigned int defaultrcs = 257;
 /**********************************************************************************
  * Appereance
  *  Default shape of cursor
- *    2: Block ("█")
- *    4: Underline ("_")
- *    6: Bar ("|")
- *    7: Snowman ("☃")
++ * https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h4-Functions-using-CSI-_-ordered-by-the-final-character-lparen-s-rparen:CSI-Ps-SP-q.1D81
++ * Default style of cursor
++ * 0: Blinking block
++ * 1: Blinking block (default)
++ * 2: Steady block ("â–ˆ")
++ * 3: Blinking underline
++ * 4: Steady underline ("_")
++ * 5: Blinking bar
++ * 6: Steady bar ("|")
++ * 7: Blinking st cursor
++ * 8: Steady st cursor
+
  *
  *  Default colour and shape of the mouse cursor
  **********************************************************************************/
 
 
 static unsigned int cursorshape = 5;
+static Rune stcursor = 0x2603; /* snowman (U+2603) */
+
 static unsigned int mouseshape = XC_xterm;
 static unsigned int mousefg = 7;
 static unsigned int mousebg = 0;

@@ -29,11 +29,64 @@
 + [ligatures](https://st.suckless.org/patches/ligatures/)
 + [font2](https://st.suckless.org/patches/font2/)
 + [newterm](https://st.suckless.org/patches/newterm/) [custom](https://github.com/BeyondMagic/st/blob/master/patches/newterm_custom_argument.patch)
-+ [any geometry](https://st.suckless.org/patches/anygeometry/)(https://st.suckless.org/patches/anygeometry/)
++ [any geometry](https://st.suckless.org/patches/anygeometry/)
 + [vertcenter](https://st.suckless.org/patches/vertcenter/)
 + [undercurl](https://st.suckless.org/patches/undercurl/)
 + [live-reload-xresources](https://github.com/gnotclub/xst/commit/c0ffcfbaf8af25468103dd92e0c7e83555e08c7a)
++ [blinking-cursor](https://st.suckless.org/patches/blinking_cursor/)
 
+## XResources
+
+Example file:
+
+```
+st.font           : Fira Code:pixelsize=12.25:antialias=true
+st.termname       : st-256color
+st.blinktimeout   : 500
+st.bellvolume     : 0
+st.padding        : 17
+st.cursorshape    : 5
+st.cwscale        : 0.875
+st.chscale        : 0.875
+st.opacity        : 0.875
+st.ligatures      : 1
+st.color0         : #000020
+st.color1         : #EC5E66
+st.color2         : #009900
+st.color3         : #FAC863
+st.color4         : #6699CC
+st.color5         : #D75F86
+st.color6         : #357CD5
+st.color7         : #FDFCFD
+st.color8         : #424043
+st.color9         : #ED2E62
+st.color10        : #5CBF53
+st.color11        : #F3D353
+st.color12        : #65D9EF
+st.color13        : #FA74CE
+st.color14        : #519FD1
+st.color15        : #FFFFFF
+st.color255       : #000020
+st.color256       : #111111
+st.color257       : #ffffff
+st.color258       : #0A0C11
+st.foreground     : #FDFCFD
+st.background     : #0a0c11
+st.cursorfg       : #111111
+st.reverse-cursor : #ffffff
+```
+
+Apply the changes to Xorg.
+
+```bash
+xrdb ~/.config/xorg/XResources
+```
+
+Apply the changes to St instances.
+
+```bash
+kill -USR1 $(pidof st)
+```
 
 ### Support
 
