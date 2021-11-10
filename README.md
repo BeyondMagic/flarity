@@ -32,6 +32,8 @@
 + [any geometry](https://st.suckless.org/patches/anygeometry/)(https://st.suckless.org/patches/anygeometry/)
 + [vertcenter](https://st.suckless.org/patches/vertcenter/)
 + [undercurl](https://st.suckless.org/patches/undercurl/)
++ [live-reload-xresources](https://github.com/gnotclub/xst/commit/c0ffcfbaf8af25468103dd92e0c7e83555e08c7a)
+
 
 ### Support
 
