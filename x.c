@@ -2688,21 +2688,22 @@ xrdb_load(void)
 				colorname[i] = ret.addr;
 		}
 
-    XRESOURCE_LOAD_META("font_fallback");
-    int count = 0, endchar = fc = sizeof(font2) / sizeof(*font2);
-    for (int i = 0; ret.addr[i]; i++) if (ret.addr[i] == ',') count++;
-    if (count > 0)
-    {
-      for (int i = 0; i <= count; i++)
+    XRESOURCE_LOAD_META("font_fallback") {
+      int count = 0, endchar = fc = sizeof(font2) / sizeof(*font2);
+      for (int i = 0; ret.addr[i]; i++) if (ret.addr[i] == ',') count++;
+      if (count > 0)
       {
-        if (i == 0) font2[endchar + i] = strtok(ret.addr, ",");
-        else        font2[endchar + i] = strtok(NULL, ",");
+        for (int i = 0; i <= count; i++)
+        {
+          if (i == 0) font2[endchar + i] = strtok(ret.addr, ",");
+          else        font2[endchar + i] = strtok(NULL, ",");
+          fc++;
+        }
+        font2[endchar + count + 1] = '\0';
+      } else if (ret.addr) {
+        font2[endchar] = ret.addr;
         fc++;
       }
-      font2[endchar + count + 1] = '\0';
-    } else if (ret.addr) {
-      font2[endchar] = ret.addr;
-      fc++;
     }
 
 		XRESOURCE_LOAD_STRING("foreground", colorname[defaultfg]);
