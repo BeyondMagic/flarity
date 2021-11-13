@@ -75,7 +75,7 @@ static void ttysend(const Arg *);
 #include "config.h"
 
 /* Calculate count of spare fonts */
-int fc = sizeof(font2) / sizeof(*font2);
+int fc;
 
 /* XEMBED messages */
 #define XEMBED_FOCUS_IN  4
@@ -2687,7 +2687,7 @@ xrdb_load(void)
 		}
 
     XRESOURCE_LOAD_META("font_fallback");
-    int count = 0, endchar = sizeof(font2) / sizeof(*font2);
+    int count = 0, endchar = fc = sizeof(font2) / sizeof(*font2);
     for (int i = 0; ret.addr[i]; i++) if (ret.addr[i] == ',') count++;
     if (count > 0)
     {
