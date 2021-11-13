@@ -39,8 +39,11 @@
 
 Example file:
 
+`st.font_fallback` is used for font2, multiple ones are divided by `,`.
+
 ```
 st.font           : Fira Code:pixelsize=12.25:antialias=true
+st.font_fallback  : Fira Code Nerd Font Mono:style=Regular:pixelsize=13:antialias=true,Material\\-Design\\-Iconic\\-Font:style=Design-Iconic-Font:pixelsize=12,JoyPixels:pixelsize=13
 st.termname       : st-256color
 st.blinktimeout   : 500
 st.bellvolume     : 0
