@@ -2,32 +2,13 @@
  * thinking in possible future patches:
  *   https://pastebin.com/KMcCNxXT
  *
- * Fonts
- *
- * TODO: Don't paste something if has image code, for example, PNG
  **********************************************************************************/
-
-
-/*static char *font      = "Fira Code:style=Regular:pixelsize=12:antialias=true:autohint=true";
-
-static char *font2[] = {
-
-  "Hack:style=Regular:pixelsize=12:antialias=true:autohint=true",
-
-};*/
 
 static char *font    = "Fira Code:pixelsize=12.25:antialias=true";
 
-//static char *font    = "JetBrainsMono Nerd Font Mono:pixelsize=12.75:antialias=true";
-//static char *font    = "JetBrainsMono Nerd Font:pixelsize=12:antialias=true";
-
 static char *font2[] = {
 
-  "Material-Design-Iconic-Font:style=Design-Iconic-Font:antialias=true:pixelsize=12.25",
-  "Fira Code:pixelsize=12.25:antialias=true",
-
 };
-
 
 /**********************************************************************************
  * Appereance
