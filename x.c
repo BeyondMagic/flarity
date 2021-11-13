@@ -74,6 +74,9 @@ static void ttysend(const Arg *);
 /* config.h for applying patches and the configuration. */
 #include "config.h"
 
+/* Calculate count of spare fonts */
+int fc = sizeof(font2) / sizeof(*font2);
+
 /* XEMBED messages */
 #define XEMBED_FOCUS_IN  4
 #define XEMBED_FOCUS_OUT 5
@@ -1106,14 +1109,11 @@ xloadsparefonts(void)
 {
 	FcPattern *pattern;
 	double sizeshift, fontval;
-	int fc;
 	char **fp;
 
 	if (frclen != 0)
 		die("can't embed spare fonts. cache isn't empty");
 
-	/* Calculate count of spare fonts */
-	fc = sizeof(font2) / sizeof(*font2);
 	if (fc == 0)
 		return;
 
@@ -2668,9 +2668,8 @@ xrdb_load(void)
 		xrdb = XrmGetStringDatabase(xrm);
 
 		/* handling colors here without macros to do via loop. */
-		int i = 0;
 		char loadValue[12] = "";
-		for (i = 0; i < 256; i++)
+		for (int i = 0; i < 256; i++)
 		{
 			sprintf(loadValue, "%s%d", "st.color", i);
 
@@ -2686,6 +2685,23 @@ xrdb_load(void)
 			if (ret.addr != NULL && !strncmp("String", type, 64))
 				colorname[i] = ret.addr;
 		}
+
+    XRESOURCE_LOAD_META("font_fallback");
+    int count = 0, endchar = sizeof(font2) / sizeof(*font2);
+    for (int i = 0; ret.addr[i]; i++) if (ret.addr[i] == ',') count++;
+    if (count > 0)
+    {
+      for (int i = 0; i <= count; i++)
+      {
+        if (i == 0) font2[endchar + i] = strtok(ret.addr, ",");
+        else        font2[endchar + i] = strtok(NULL, ",");
+        fc++;
+      }
+      font2[endchar + count + 1] = '\0';
+    } else if (ret.addr) {
+      font2[endchar] = ret.addr;
+      fc++;
+    }
 
 		XRESOURCE_LOAD_STRING("foreground", colorname[defaultfg]);
 		XRESOURCE_LOAD_STRING("background", colorname[defaultbg]);
@@ -2728,6 +2744,7 @@ xrdb_load(void)
 		/* XRESOURCE_LOAD_CHAR("prompt_char", prompt_char); */
 
 	}
+
 	XFlush(dpy);
 }
 
@@ -2740,6 +2757,7 @@ reload(int sig)
 	xloadcols();
 	xunloadfonts();
 	xloadfonts(font, 0);
+  xloadsparefonts();
 
 	/* pretend the window just got resized */
 	cresize(win.w, win.h);
