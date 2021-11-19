@@ -4,6 +4,8 @@
 
 <p align="center">st is a simple terminal emulator for X which sucks less.</p>
 
+---
+
 ### Keybinds
 
 + **Normal** scroll with mouse and `Alt+Up` and `Alt+Down`;
@@ -18,6 +20,8 @@
 	- `noremap! <F36><F35> <C-w>` nvim
 	- `inoremap <F36><F35> <C-w>` nvim
 	- `bindkey '^[[24;5~^[[23;5~' backward-kill-word` zsh
+
+---
 
 ## Patches (as far as I remember)
 
@@ -34,6 +38,8 @@
 + [undercurl](https://st.suckless.org/patches/undercurl/)
 + [live-reload-xresources](https://github.com/gnotclub/xst/commit/c0ffcfbaf8af25468103dd92e0c7e83555e08c7a)
 + [blinking-cursor](https://st.suckless.org/patches/blinking_cursor/)
+
+---
 
 ## XResources
 
@@ -91,6 +97,8 @@ Apply the changes to St instances.
 kill -USR1 $(pidof st)
 ```
 
+---
+
 ### Support
 
 + coloured undercurl (apply the st.info for external programs)
@@ -98,22 +106,27 @@ kill -USR1 $(pidof st)
 + history (default: 2000 lines)
 + Emojis 
 
-### Requirements
-
-In order to build st you need the Xlib header files.
+---
 
 ### Fonts
 
 This was configured with Fira Code and Material Design Iconic 2 fonts.
 
+---
+
 ### Installation<
 
-Edit config.mk to match your local setup (st is installed into
-the /usr/local namespace by default).
+First, install this package in your system: `libxft-bgra`.
 
-Afterwards enter the following command to build and install st (if
-necessary as root):
+Clone somewhere in your system:
 
-    make clean install
+```
+$ git clone https://github.com/beyondmagic/st
+$ cd st
+$ make install
+$ st
+```
+
+If you want to, edit `config.mk` to match your local setup (st is installed into the /usr/local namespace by default).
 
 Then run `tic -x -o ~/.terminfo st.info` to have support in multiple terminal programs that use undercurls, ...
