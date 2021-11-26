@@ -2700,7 +2700,7 @@ xrdb_load(void)
           fc++;
         }
         font2[endchar + count + 1] = '\0';
-      } else if (ret.addr) {
+      } else {
         font2[endchar] = ret.addr;
         fc++;
       }
