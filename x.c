@@ -74,6 +74,9 @@ static void ttysend(const Arg *);
 /* config.h for applying patches and the configuration. */
 #include "config.h"
 
+/* size of title stack */
+#define TITLESTACKSIZE 8
+
 /* Calculate count of spare fonts */
 int fc;
 
@@ -239,6 +242,8 @@ static DC dc;
 static XWindow xw;
 static XSelection xsel;
 static TermWindow win;
+static int tstki; /* title stack index */
+static char *titlestack[TITLESTACKSIZE]; /* title stack */
 
 /* Font Ring Cache */
 enum {
@@ -2238,16 +2243,46 @@ xseticontitle(char *p)
 }
 
 void
-xsettitle(char *p)
+xfreetitlestack(void)
 {
-	XTextProperty prop;
-	DEFAULT(p, opt_title);
+	for (int i = 0; i < LEN(titlestack); i++) {
+		free(titlestack[i]);
+		titlestack[i] = NULL;
+	}
+}
 
-	Xutf8TextListToTextProperty(xw.dpy, &p, 1, XUTF8StringStyle,
-			&prop);
+void
+xsettitle(char *p, int pop)
+{
+
+ 	XTextProperty prop;
+ 
+	free(titlestack[tstki]);
+	if (pop) {
+		titlestack[tstki] = NULL;
+		tstki = (tstki - 1 + TITLESTACKSIZE) % TITLESTACKSIZE;
+		p = titlestack[tstki] ? titlestack[tstki] : opt_title;
+	} else if (p) {
+		titlestack[tstki] = xstrdup(p);
+	} else {
+		titlestack[tstki] = NULL;
+		p = opt_title;
+	}
+ 
+  Xutf8TextListToTextProperty(xw.dpy, &p, 1, XUTF8StringStyle, &prop);
 	XSetWMName(xw.dpy, xw.win, &prop);
 	XSetTextProperty(xw.dpy, xw.win, &prop, xw.netwmname);
 	XFree(prop.value);
+}
+
+void
+xpushtitle(void)
+{
+	int tstkin = (tstki + 1) % TITLESTACKSIZE;
+
+	free(titlestack[tstkin]);
+	titlestack[tstkin] = titlestack[tstki] ? xstrdup(titlestack[tstki]) : NULL;
+	tstki = tstkin;
 }
 
 int
@@ -2732,6 +2767,7 @@ xrdb_load(void)
 		/* XRESOURCE_LOAD_INTEGER("borderless", borderless); */
 		XRESOURCE_LOAD_INTEGER("cursorshape", cursorshape);
     XRESOURCE_LOAD_INTEGER("ligatures", ligatures);
+    XRESOURCE_LOAD_FLOAT("opacity", alpha);
 
 		/* cursorblinkstate = 1; // in case if cursor shape was changed from a blinking one to a non-blinking */
 		/* XRESOURCE_LOAD_INTEGER("cursorthickness", cursorthickness); */
