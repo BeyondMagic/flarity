@@ -18,7 +18,7 @@ static int borderpx  = 17;
 static float cwscale = 0.875;
 //static float chscale = 1.125;
 static float chscale = 0.875;
-float alpha          = 0.925;
+float alpha          = 0.8;
 static int ligatures = 1;
 
 

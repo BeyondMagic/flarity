@@ -2892,6 +2892,7 @@ run:
 //	defaultbg = MAX(LEN(colorname), 256);
 	tinit(cols, rows);
 	xinit(cols, rows);
+  reload(SIGUSR1);
 	xsetenv();
 	selinit();
 	run();
