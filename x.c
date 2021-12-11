@@ -334,6 +334,7 @@ zoomabs(const Arg *arg)
 {
 	xunloadfonts();
 	xloadfonts(usedfont, arg->f);
+  printf("current: %i\n", fc);
   fc--;
 	xloadsparefonts();
   fc++;
@@ -1294,9 +1295,6 @@ xinit(int cols, int rows)
 
 	usedfont = (opt_font == NULL)? font : opt_font;
 	xloadfonts(usedfont, 0);
-
-	/* spare fonts */
-	xloadsparefonts();
 
 	/* colors */
 //	xw.cmap = XDefaultColormap(xw.dpy, xw.scr);
@@ -2885,16 +2883,17 @@ run:
 
 	setlocale(LC_CTYPE, "");
 	XSetLocaleModifiers("");
-  xrdb_load();
+  //xrdb_load();
 	signal(SIGUSR1, reload);
 	cols = MAX(cols, 1);
 	rows = MAX(rows, 1);
 //	defaultbg = MAX(LEN(colorname), 256);
 	tinit(cols, rows);
 	xinit(cols, rows);
-  reload(SIGUSR1);
+
 	xsetenv();
 	selinit();
+	xrdb_load();
 	run();
 
 	return 0;
