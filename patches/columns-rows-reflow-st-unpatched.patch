@@ -1,7 +1,8 @@
 From: beyondmagic <koetemagie@gmail.com>
 Date: Tue, 04 Nov 2021
 Subject: [PATCH] Patch to redraw columns and rows in 
-case of hidden by resize.
+case of hidden by resize. Extracted from 
+https://github.com/ashish-yadav11/st @ashish-yadav11 
 diff --git a/st.c b/st.c
 index a9338e1..6c59254 100644
 --- a/st.c
