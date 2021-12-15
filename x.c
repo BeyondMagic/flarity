@@ -334,7 +334,6 @@ zoomabs(const Arg *arg)
 {
 	xunloadfonts();
 	xloadfonts(usedfont, arg->f);
-  printf("current: %i\n", fc);
   fc--;
 	xloadsparefonts();
   fc++;
@@ -2883,7 +2882,7 @@ run:
 
 	setlocale(LC_CTYPE, "");
 	XSetLocaleModifiers("");
-  //xrdb_load();
+  xrdb_load();
 	signal(SIGUSR1, reload);
 	cols = MAX(cols, 1);
 	rows = MAX(rows, 1);

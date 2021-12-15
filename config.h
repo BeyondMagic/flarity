@@ -4,7 +4,7 @@
  *
  **********************************************************************************/
 
-static char *font    = "Fira Code:pixelsize=12.25:antialias=true";
+static char *font    = "Fira Code:pixelsize=14:antialias=true";
 
 static char *font2[] = {
 

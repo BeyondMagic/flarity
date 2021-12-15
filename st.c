@@ -217,7 +217,9 @@ static void tinsertblank(int);
 static void tinsertblankline(int);
 static int tlinelen(Line line);
 static int tiswrapped(Line line);
-static char *tgetline(char *, const Glyph *, const Glyph *, int);
+//static char *tgetline(char *, const Glyph *, const Glyph *, int);
+static char *tgetglyphs(char *, const Glyph *, const Glyph *, int);
+static size_t tgetline(char *, const Glyph *, int);
 static void tmoveto(int, int);
 static void tmoveato(int, int);
 static void tnewline(int);
@@ -477,20 +479,33 @@ tiswrapped(Line line)
 }
 
 char *
-tgetline(char *buf, const Glyph *gp, const Glyph *last, int gettab)
+tgetglyphs(char *buf, const Glyph *gp, const Glyph *lgp, int gettab)
 {
-	while (gp <= last)
+	while (gp <= lgp)
 		if (gp->mode & ATTR_WDUMMY) {
 			gp++;
 		} else if (gettab && gp->state == GLYPH_TAB) {
 			*(buf++) = '\t';
-			while (++gp <= last && gp->state == GLYPH_TDUMMY);
+			while (++gp <= lgp && gp->state == GLYPH_TDUMMY);
 		} else {
 			buf += utf8encode((gp++)->u, buf);
 		}
 	return buf;
 }
 
+size_t
+tgetline(char *buf, const Glyph *fgp, int gettab)
+{
+	char *ptr;
+	const Glyph *lgp = &fgp[term.col - 1];
+
+	while (lgp > fgp && lgp->u == ' ')
+		lgp--;
+	ptr = tgetglyphs(buf, fgp, lgp, gettab);
+	if (!(lgp->mode & ATTR_WRAP))
+		*(ptr++) = '\n';
+	return ptr - buf;
+}
 
 void
 selstart(int col, int row, int snap)
@@ -678,7 +693,7 @@ getsel(void)
 {
 	char *str, *ptr;
 	int y, lastx, linelen;
-	const Glyph *gp, *last;
+	const Glyph *gp, *lgp;
 
 	if (sel.ob.x == -1 || sel.alt != IS_SET(MODE_ALTSCREEN))
 		return NULL;
@@ -702,9 +717,9 @@ getsel(void)
 			gp = &line[sel.nb.y == y ? sel.nb.x : 0];
 			lastx = (sel.ne.y == y) ? sel.ne.x : term.col-1;
 		}
-		last = &line[MIN(lastx, linelen-1)];
+		lgp = &line[MIN(lastx, linelen-1)];
 
-		ptr = tgetline(ptr, gp, last, sel.type != SEL_RECTANGULAR);
+		ptr = tgetglyphs(ptr, gp, lgp, sel.type != SEL_RECTANGULAR);
 		/*
 		 * Copy and pasting of line endings is inconsistent
 		 * in the inconsistent terminal and GUI world.
@@ -715,7 +730,7 @@ getsel(void)
 		 * FIXME: Fix the computer world.
 		 */
 		if ((y < sel.ne.y || lastx >= linelen) &&
-		    (!(last->mode & ATTR_WRAP) || sel.type == SEL_RECTANGULAR))
+		    (!(lgp->mode & ATTR_WRAP) || sel.type == SEL_RECTANGULAR))
 			*ptr++ = '\n';
 	}
 	*ptr = '\0';
@@ -2362,19 +2377,7 @@ void
 tdumpline(int n)
 {
 	char str[(term.col + 1) * UTF_SIZ];
-	char *ptr;
-	const Glyph *gp, *last;
-
-	gp = &term.line[n][0];
-	last = &gp[term.col - 1];
-	while (last > gp && last->state == GLYPH_EMPTY)
-		last--;
-
-	ptr = tgetline(str, gp, last, 1);
-	if (!(last->mode & ATTR_WRAP))
-		*(ptr++) = '\n';
-
-	tprinter(str, ptr-str);
+  tprinter(str, tgetline(str, &term.line[n][0], 1));
 }
 
 void
@@ -2408,6 +2411,16 @@ twritetab(void)
 {
 	int x = term.c.x, y = term.c.y;
 
+	/* possibly best, yet not perfect, hack to not "writetab"
+	 * when tab was intended only for cursor movement */
+  do {
+		if (term.line[y][x].state != GLYPH_EMPTY) {
+			while (++x < term.col && !term.tabs[x]);
+			goto end;
+		}
+  } while (++x < term.col && !term.tabs[x]);
+  x = term.c.x;
+
 	/* selected() takes relative coordinates */
 	if (selected(x + term.scr, y + term.scr))
 		selclear();
@@ -2420,7 +2433,8 @@ twritetab(void)
 		term.line[y][x].state = GLYPH_TDUMMY;
 	}
 
-	term.c.x = MIN(x, term.col-1);
+  end:
+  	term.c.x = MIN(x, term.col-1);
 }
 
 void
@@ -2897,7 +2911,7 @@ treflow(int col, int row)
 		} else/* if (col - nx < len - ox) */ {
 			memcpy(&buf[ny][nx], &line[ox], (col-nx) * sizeof(Glyph));
 			for (ox += col - nx; ox < len &&
-			                     line[ox].mode == GLYPH_TDUMMY; ox++);
+			                     line[ox].state == GLYPH_TDUMMY; ox++);
 			if (ox == len) {
 				ox = 0, oy++;
 			} else {
