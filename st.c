@@ -2220,7 +2220,7 @@ strhandle(void)
 			return;
 		case 2:
 			if (narg > 1)
-				xsettitle(STRESCARGREST(1), 1);
+				xsettitle(STRESCARGREST(1), 0);
 			return;
 		case 52:
 			if (narg > 2 && allowwindowops) {
