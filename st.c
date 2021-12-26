@@ -499,7 +499,7 @@ tgetline(char *buf, const Glyph *fgp, int gettab)
 	char *ptr;
 	const Glyph *lgp = &fgp[term.col - 1];
 
-	while (lgp > fgp && lgp->u == ' ')
+	while (lgp > fgp && lgp->state == GLYPH_EMPTY)
 		lgp--;
 	ptr = tgetglyphs(buf, fgp, lgp, gettab);
 	if (!(lgp->mode & ATTR_WRAP))
@@ -582,9 +582,11 @@ selnormalize(void)
 	i = tlinelen(line);
 	if (sel.nb.x > i)
 		sel.nb.x = i;
-	while (sel.nb.x > 0 && line[sel.nb.x].state == GLYPH_TDUMMY)
-		if (line[sel.nb.x-1].state >= GLYPH_TAB)
-			sel.nb.x--;
+	while (sel.nb.x > 0 && line[sel.nb.x].state == GLYPH_TDUMMY &&
+	       (line[sel.nb.x-1].state == GLYPH_TDUMMY ||
+	        line[sel.nb.x-1].state == GLYPH_TAB)) {
+    sel.nb.x--;
+  }
 
 	line = TLINE(sel.ne.y);
 	i = tlinelen(line) - 1;
@@ -592,9 +594,11 @@ selnormalize(void)
 		sel.ne.x = term.col - 1;
 		return;
 	}
-	if (line[sel.ne.x].state >= GLYPH_TAB)
+  if (line[sel.ne.x].state == GLYPH_TAB ||
+	    line[sel.ne.x].state == GLYPH_TDUMMY) {
 		while (sel.ne.x < i && line[sel.ne.x+1].state == GLYPH_TDUMMY)
 			sel.ne.x++;
+  }
 }
 
 int
@@ -2789,6 +2793,7 @@ check_control_code:
 
 	gp = &term.line[term.c.y][term.c.x];
 	if (IS_SET(MODE_WRAP) && (term.c.state & CURSOR_WRAPNEXT)) {
+    gp->state = GLYPH_SET;
 		gp->mode |= ATTR_WRAP;
 		tnewline(1);
 		gp = &term.line[term.c.y][term.c.x];
@@ -2901,7 +2906,7 @@ treflow(int col, int row)
 				for (j = nx; j < col; j++)
 					tclearglyph(&buf[ny][j], 0);
 				nx = 0;
-			} else {
+			} else if (nx > 0) {
 				buf[ny][nx - 1].mode &= ~ATTR_WRAP;
 			}
 			ox = 0, oy++;
@@ -2915,6 +2920,7 @@ treflow(int col, int row)
 			if (ox == len) {
 				ox = 0, oy++;
 			} else {
+        buf[ny][col - 1].state = GLYPH_SET;
 				buf[ny][col - 1].mode |= ATTR_WRAP;
 			}
 			nx = 0;
