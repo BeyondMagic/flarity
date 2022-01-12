@@ -38,6 +38,7 @@
 + [undercurl](https://st.suckless.org/patches/undercurl/)
 + [live-reload-xresources](https://github.com/gnotclub/xst/commit/c0ffcfbaf8af25468103dd92e0c7e83555e08c7a)
 + [blinking-cursor](https://st.suckless.org/patches/blinking_cursor/)
++ [glyph-wide-support](https://github.com/LukeSmithxyz/st/commit/e3b821dcb3511d60341dec35ee05a4a0abfef7f2)
 
 ---
 

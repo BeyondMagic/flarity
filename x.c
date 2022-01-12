@@ -162,7 +162,7 @@ typedef struct {
 
 static inline ushort sixd_to_16bit(int);
 static int xmakeglyphfontspecs(XftGlyphFontSpec *, const Glyph *, int, int, int);
-static void xdrawglyphfontspecs(const XftGlyphFontSpec *, Glyph, int, int, int);
+static void xdrawglyphfontspecs(const XftGlyphFontSpec *, Glyph, int, int, int, int);
 static void xdrawglyph(Glyph, int, int);
 static void xclear(int, int, int, int);
 static int xgeommasktogravity(int);
@@ -1588,15 +1588,14 @@ static int getSlope (int x, int iPoint, int waveWidth)
 }
 
 void
-xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, int y)
+xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, int y, int dmode)
 {
 	int charlen = len * ((base.mode & ATTR_WIDE) ? 2 : 1);
-//	int winx = borderpx + x * win.cw, winy = borderpx + y * win.ch,
 	int winx = win.hborderpx + x * win.cw, winy = win.vborderpx + y * win.ch,
 	    width = charlen * win.cw;
 	Color *fg, *bg, *temp, revfg, revbg, truefg, truebg;
 	XRenderColor colfg, colbg;
-	XRectangle r;
+	// XRectangle r;
 
 	/* Fallback on color display for attributes not supported by the font */
 	if (base.mode & ATTR_ITALIC && base.mode & ATTR_BOLD) {
@@ -1680,6 +1679,7 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 	if (base.mode & ATTR_INVISIBLE)
 		fg = bg;
 
+  if (dmode & DRAW_BG) {
 	/* Intelligent cleaning up of the borders. */
 	if (x == 0) {
 		xclear(0, (y == 0)? 0 : winy, win.vborderpx,
@@ -1696,390 +1696,390 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 		xclear(winx, winy + win.ch, winx + width, win.h);
 
 	/* Clean up the region we want to draw to. */
+  /* Fill the background */
 	XftDrawRect(xw.draw, bg, winx, winy, width, win.ch);
+  }
 
-	/* Set the clip region because Xft is sometimes dirty. */
-	r.x = 0;
-	r.y = 0;
-	r.height = win.ch;
-	r.width = width;
-	XftDrawSetClipRectangles(xw.draw, winx, winy, &r, 1);
+  if (dmode & DRAW_FG) {
 
-	/* Render the glyphs. */
-//	XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
+    /* Set the clip region because Xft is sometimes dirty. */
+    // r.x = 0;
+    // r.y = 0;
+    // r.height = win.ch;
+    // r.width = width;
+    // XftDrawSetClipRectangles(xw.draw, winx, winy, &r, 1);
 
-	if (base.mode & ATTR_BOXDRAW) {
-		drawboxes(winx, winy, width / len, win.ch, fg, bg, specs, len);
-	} else {
-		/* Render the glyphs. */
-		XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
-	}
+    /* Render the glyphs. */
+  //	XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
+
+    if (base.mode & ATTR_BOXDRAW) {
+      drawboxes(winx, winy, width / len, win.ch, fg, bg, specs, len);
+    } else {
+      /* Render the glyphs. */
+      XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
+    }
 
 	/* Render underline and strikethrough. */
-	if (base.mode & ATTR_UNDERLINE) {
-//		XftDrawRect(xw.draw, fg, winx, winy + dc.font.ascent + 1,
-//		XftDrawRect(xw.draw, fg, winx, winy + win.cyo + dc.font.ascent + 1,
-//				width, 1);
-		// Underline Color
-		// Underline Color
-		const int widthThreshold  = 28; // +1 width every widthThreshold px of font
-		int wlw = (win.ch / widthThreshold) + 1; // Wave Line Width
-		int linecolor;
-		if ((base.ucolor[0] >= 0) &&
-			!(base.mode & ATTR_BLINK && win.mode & MODE_BLINK) &&
-			!(base.mode & ATTR_INVISIBLE)
-		) {
-			// Special color for underline
-			// Index
-			if (base.ucolor[1] < 0) {
-				linecolor = dc.col[base.ucolor[0]].pixel;
-			}
-			// RGB
-			else {
-				XColor lcolor;
-				lcolor.red = base.ucolor[0] * 257;
-				lcolor.green = base.ucolor[1] * 257;
-				lcolor.blue = base.ucolor[2] * 257;
-				lcolor.flags = DoRed | DoGreen | DoBlue;
-				XAllocColor(xw.dpy, xw.cmap, &lcolor);
-				linecolor = lcolor.pixel;
-			}
-		} else {
-			// Foreground color for underline
-			linecolor = fg->pixel;
-		}
+    if (base.mode & ATTR_UNDERLINE) {
+      // Underline Color
+      const int widthThreshold  = 28; // +1 width every widthThreshold px of font
+      int wlw = (win.ch / widthThreshold) + 1; // Wave Line Width
+      int linecolor;
+      if ((base.ucolor[0] >= 0) &&
+        !(base.mode & ATTR_BLINK && win.mode & MODE_BLINK) &&
+        !(base.mode & ATTR_INVISIBLE)
+      ) {
+        // Special color for underline
+        // Index
+        if (base.ucolor[1] < 0) {
+          linecolor = dc.col[base.ucolor[0]].pixel;
+        }
+        // RGB
+        else {
+          XColor lcolor;
+          lcolor.red = base.ucolor[0] * 257;
+          lcolor.green = base.ucolor[1] * 257;
+          lcolor.blue = base.ucolor[2] * 257;
+          lcolor.flags = DoRed | DoGreen | DoBlue;
+          XAllocColor(xw.dpy, xw.cmap, &lcolor);
+          linecolor = lcolor.pixel;
+        }
+      } else {
+        // Foreground color for underline
+        linecolor = fg->pixel;
+      }
 
-		XGCValues ugcv = {
-			.foreground = linecolor,
-			.line_width = wlw,
-			.line_style = LineSolid,
-			.cap_style = CapNotLast
-		};
+      XGCValues ugcv = {
+        .foreground = linecolor,
+        .line_width = wlw,
+        .line_style = LineSolid,
+        .cap_style = CapNotLast
+      };
 
-		GC ugc = XCreateGC(xw.dpy, XftDrawDrawable(xw.draw),
-			GCForeground | GCLineWidth | GCLineStyle | GCCapStyle,
-			&ugcv);
+      GC ugc = XCreateGC(xw.dpy, XftDrawDrawable(xw.draw),
+        GCForeground | GCLineWidth | GCLineStyle | GCCapStyle,
+        &ugcv);
 
-		// Underline Style
-		if (base.ustyle != 3) {
-			//XftDrawRect(xw.draw, fg, winx, winy + dc.font.ascent + 1, width, 1);
-			XFillRectangle(xw.dpy, XftDrawDrawable(xw.draw), ugc, winx,
-				winy + dc.font.ascent + 1, width, wlw);
-		} else if (base.ustyle == 3) {
-			int ww = win.cw;//width;
-			int wh = dc.font.descent - wlw/2 - 1;//r.height/7;
-			int wx = winx;
-			int wy = winy + win.ch - dc.font.descent;
+      // Underline Style
+      if (base.ustyle != 3) {
+        XFillRectangle(xw.dpy, XftDrawDrawable(xw.draw), ugc, winx,
+          winy + dc.font.ascent + 1, width, wlw);
+      } else if (base.ustyle == 3) {
+        int ww = win.cw;//width;
+        int wh = dc.font.descent - wlw/2 - 1;//r.height/7;
+        int wx = winx;
+        int wy = winy + win.ch - dc.font.descent;
 
 #if UNDERCURL_STYLE == UNDERCURL_CURLY
-			// Draw waves
-			int narcs = charlen * 2 + 1;
-			XArc *arcs = xmalloc(sizeof(XArc) * narcs);
+        // Draw waves
+        int narcs = charlen * 2 + 1;
+        XArc *arcs = xmalloc(sizeof(XArc) * narcs);
 
-			int i = 0;
-			for (i = 0; i < charlen-1; i++) {
-				arcs[i*2] = (XArc) {
-					.x = wx + win.cw * i + ww / 4,
-					.y = wy,
-					.width = win.cw / 2,
-					.height = wh,
-					.angle1 = 0,
-					.angle2 = 180 * 64
-				};
-				arcs[i*2+1] = (XArc) {
-					.x = wx + win.cw * i + ww * 0.75,
-					.y = wy,
-					.width = win.cw/2,
-					.height = wh,
-					.angle1 = 180 * 64,
-					.angle2 = 180 * 64
-				};
-			}
-			// Last wave
-			arcs[i*2] = (XArc) {wx + ww * i + ww / 4, wy, ww / 2, wh,
-			0, 180 * 64 };
-			// Last wave tail
-			arcs[i*2+1] = (XArc) {wx + ww * i + ww * 0.75, wy, ceil(ww / 2.),
-			wh, 180 * 64, 90 * 64};
-			// First wave tail
-			i++;
-			arcs[i*2] = (XArc) {wx - ww/4 - 1, wy, ceil(ww / 2.), wh, 270 * 64,
-			90 * 64 };
+        int i = 0;
+        for (i = 0; i < charlen-1; i++) {
+          arcs[i*2] = (XArc) {
+            .x = wx + win.cw * i + ww / 4,
+            .y = wy,
+            .width = win.cw / 2,
+            .height = wh,
+            .angle1 = 0,
+            .angle2 = 180 * 64
+          };
+          arcs[i*2+1] = (XArc) {
+            .x = wx + win.cw * i + ww * 0.75,
+            .y = wy,
+            .width = win.cw/2,
+            .height = wh,
+            .angle1 = 180 * 64,
+            .angle2 = 180 * 64
+          };
+        }
+        // Last wave
+        arcs[i*2] = (XArc) {wx + ww * i + ww / 4, wy, ww / 2, wh,
+        0, 180 * 64 };
+        // Last wave tail
+        arcs[i*2+1] = (XArc) {wx + ww * i + ww * 0.75, wy, ceil(ww / 2.),
+        wh, 180 * 64, 90 * 64};
+        // First wave tail
+        i++;
+        arcs[i*2] = (XArc) {wx - ww/4 - 1, wy, ceil(ww / 2.), wh, 270 * 64,
+        90 * 64 };
 
-			XDrawArcs(xw.dpy, XftDrawDrawable(xw.draw), ugc, arcs, narcs);
+        XDrawArcs(xw.dpy, XftDrawDrawable(xw.draw), ugc, arcs, narcs);
 
-			free(arcs);
+        free(arcs);
 #elif UNDERCURL_STYLE == UNDERCURL_SPIKY
-			// Make the underline corridor larger
-			/*
-			wy -= wh;
-			*/
-			wh *= 2;
+        // Make the underline corridor larger
+        /*
+        wy -= wh;
+        */
+        wh *= 2;
 
-			// Set the angle of the slope to 45Â°
-			ww = wh;
+        // Set the angle of the slope to 45Â°
+        ww = wh;
 
-			// Position of wave is independent of word, it's absolute
-			wx = (wx / (ww/2)) * (ww/2);
+        // Position of wave is independent of word, it's absolute
+        wx = (wx / (ww/2)) * (ww/2);
 
-			int marginStart = winx - wx;
+        int marginStart = winx - wx;
 
-			// Calculate number of points with floating precision
-			float n = width;					// Width of word in pixels
-			n = (n / ww) * 2;					// Number of slopes (/ or \)
-			n += 2;								// Add two last points
-			int npoints = n;					// Convert to int
+        // Calculate number of points with floating precision
+        float n = width;					// Width of word in pixels
+        n = (n / ww) * 2;					// Number of slopes (/ or \)
+        n += 2;								// Add two last points
+        int npoints = n;					// Convert to int
 
-			// Total length of underline
-			float waveLength = 0;
+        // Total length of underline
+        float waveLength = 0;
 
-			if (npoints >= 3) {
-				// We add an aditional slot in case we use a bonus point
-				XPoint *points = xmalloc(sizeof(XPoint) * (npoints + 1));
+        if (npoints >= 3) {
+          // We add an aditional slot in case we use a bonus point
+          XPoint *points = xmalloc(sizeof(XPoint) * (npoints + 1));
 
-				// First point (Starts with the word bounds)
-				points[0] = (XPoint) {
-					.x = wx + marginStart,
-					.y = (isSlopeRising(wx, 0, ww))
-						? (wy - marginStart + ww/2.f)
-						: (wy + marginStart)
-				};
+          // First point (Starts with the word bounds)
+          points[0] = (XPoint) {
+            .x = wx + marginStart,
+            .y = (isSlopeRising(wx, 0, ww))
+              ? (wy - marginStart + ww/2.f)
+              : (wy + marginStart)
+          };
 
-				// Second point (Goes back to the absolute point coordinates)
-				points[1] = (XPoint) {
-					.x = (ww/2.f) - marginStart,
-					.y = (isSlopeRising(wx, 1, ww))
-						? (ww/2.f - marginStart)
-						: (-ww/2.f + marginStart)
-				};
-				waveLength += (ww/2.f) - marginStart;
+          // Second point (Goes back to the absolute point coordinates)
+          points[1] = (XPoint) {
+            .x = (ww/2.f) - marginStart,
+            .y = (isSlopeRising(wx, 1, ww))
+              ? (ww/2.f - marginStart)
+              : (-ww/2.f + marginStart)
+          };
+          waveLength += (ww/2.f) - marginStart;
 
-				// The rest of the points
-				for (int i = 2; i < npoints-1; i++) {
-					points[i] = (XPoint) {
-						.x = ww/2,
-						.y = (isSlopeRising(wx, i, ww))
-							? wh/2
-							: -wh/2
-					};
-					waveLength += ww/2;
-				}
+          // The rest of the points
+          for (int i = 2; i < npoints-1; i++) {
+            points[i] = (XPoint) {
+              .x = ww/2,
+              .y = (isSlopeRising(wx, i, ww))
+                ? wh/2
+                : -wh/2
+            };
+            waveLength += ww/2;
+          }
 
-				// Last point
-				points[npoints-1] = (XPoint) {
-					.x = ww/2,
-					.y = (isSlopeRising(wx, npoints-1, ww))
-						? wh/2
-						: -wh/2
-				};
-				waveLength += ww/2;
+          // Last point
+          points[npoints-1] = (XPoint) {
+            .x = ww/2,
+            .y = (isSlopeRising(wx, npoints-1, ww))
+              ? wh/2
+              : -wh/2
+          };
+          waveLength += ww/2;
 
-				// End
-				if (waveLength < width) { // Add a bonus point?
-					int marginEnd = width - waveLength;
-					points[npoints] = (XPoint) {
-						.x = marginEnd,
-						.y = (isSlopeRising(wx, npoints, ww))
-							? (marginEnd)
-							: (-marginEnd)
-					};
+          // End
+          if (waveLength < width) { // Add a bonus point?
+            int marginEnd = width - waveLength;
+            points[npoints] = (XPoint) {
+              .x = marginEnd,
+              .y = (isSlopeRising(wx, npoints, ww))
+                ? (marginEnd)
+                : (-marginEnd)
+            };
 
-					npoints++;
-				} else if (waveLength > width) { // Is last point too far?
-					int marginEnd = waveLength - width;
-					points[npoints-1].x -= marginEnd;
-					if (isSlopeRising(wx, npoints-1, ww))
-						points[npoints-1].y -= (marginEnd);
-					else
-						points[npoints-1].y += (marginEnd);
-				}
+            npoints++;
+          } else if (waveLength > width) { // Is last point too far?
+            int marginEnd = waveLength - width;
+            points[npoints-1].x -= marginEnd;
+            if (isSlopeRising(wx, npoints-1, ww))
+              points[npoints-1].y -= (marginEnd);
+            else
+              points[npoints-1].y += (marginEnd);
+          }
 
-				// Draw the lines
-				XDrawLines(xw.dpy, XftDrawDrawable(xw.draw), ugc, points, npoints,
-						CoordModePrevious);
+          // Draw the lines
+          XDrawLines(xw.dpy, XftDrawDrawable(xw.draw), ugc, points, npoints,
+              CoordModePrevious);
 
-				// Draw a second underline with an offset of 1 pixel
-				if ( ((win.ch / (widthThreshold/2)) % 2)) {
-					points[0].x++;
+          // Draw a second underline with an offset of 1 pixel
+          if ( ((win.ch / (widthThreshold/2)) % 2)) {
+            points[0].x++;
 
-					XDrawLines(xw.dpy, XftDrawDrawable(xw.draw), ugc, points,
-							npoints, CoordModePrevious);
-				}
+            XDrawLines(xw.dpy, XftDrawDrawable(xw.draw), ugc, points,
+                npoints, CoordModePrevious);
+          }
 
-				// Free resources
-				free(points);
-			}
+          // Free resources
+          free(points);
+        }
 #else // UNDERCURL_CAPPED
-			// Cap is half of wave width
-			float capRatio = 0.5f;
+        // Cap is half of wave width
+        float capRatio = 0.5f;
 
-			// Make the underline corridor larger
-			wh *= 2;
+        // Make the underline corridor larger
+        wh *= 2;
 
-			// Set the angle of the slope to 45Â°
-			ww = wh;
-			ww *= 1 + capRatio; // Add a bit of width for the cap
+        // Set the angle of the slope to 45Â°
+        ww = wh;
+        ww *= 1 + capRatio; // Add a bit of width for the cap
 
-			// Position of wave is independent of word, it's absolute
-			wx = (wx / ww) * ww;
+        // Position of wave is independent of word, it's absolute
+        wx = (wx / ww) * ww;
 
-			float marginStart;
-			switch(getSlope(winx, 0, ww)) {
-				case UNDERCURL_SLOPE_ASCENDING:
-					marginStart = winx - wx;
-					break;
-				case UNDERCURL_SLOPE_TOP_CAP:
-					marginStart = winx - (wx + (ww * (2.f/6.f)));
-					break;
-				case UNDERCURL_SLOPE_DESCENDING:
-					marginStart = winx - (wx + (ww * (3.f/6.f)));
-					break;
-				case UNDERCURL_SLOPE_BOTTOM_CAP:
-					marginStart = winx - (wx + (ww * (5.f/6.f)));
-					break;
-			}
+        float marginStart;
+        switch(getSlope(winx, 0, ww)) {
+          case UNDERCURL_SLOPE_ASCENDING:
+            marginStart = winx - wx;
+            break;
+          case UNDERCURL_SLOPE_TOP_CAP:
+            marginStart = winx - (wx + (ww * (2.f/6.f)));
+            break;
+          case UNDERCURL_SLOPE_DESCENDING:
+            marginStart = winx - (wx + (ww * (3.f/6.f)));
+            break;
+          case UNDERCURL_SLOPE_BOTTOM_CAP:
+            marginStart = winx - (wx + (ww * (5.f/6.f)));
+            break;
+        }
 
-			// Calculate number of points with floating precision
-			float n = width;					// Width of word in pixels
-												//					   ._.
-			n = (n / ww) * 4;					// Number of points (./   \.)
-			n += 2;								// Add two last points
-			int npoints = n;					// Convert to int
+        // Calculate number of points with floating precision
+        float n = width;					// Width of word in pixels
+                          //					   ._.
+        n = (n / ww) * 4;					// Number of points (./   \.)
+        n += 2;								// Add two last points
+        int npoints = n;					// Convert to int
 
-			// Position of the pen to draw the lines
-			float penX = 0;
-			float penY = 0;
+        // Position of the pen to draw the lines
+        float penX = 0;
+        float penY = 0;
 
-			if (npoints >= 3) {
-				XPoint *points = xmalloc(sizeof(XPoint) * (npoints + 1));
+        if (npoints >= 3) {
+          XPoint *points = xmalloc(sizeof(XPoint) * (npoints + 1));
 
-				// First point (Starts with the word bounds)
-				penX = winx;
-				switch (getSlope(winx, 0, ww)) {
-					case UNDERCURL_SLOPE_ASCENDING:
-						penY = wy + wh/2.f - marginStart;
-						break;
-					case UNDERCURL_SLOPE_TOP_CAP:
-						penY = wy;
-						break;
-					case UNDERCURL_SLOPE_DESCENDING:
-						penY = wy + marginStart;
-						break;
-					case UNDERCURL_SLOPE_BOTTOM_CAP:
-						penY = wy + wh/2.f;
-						break;
-				}
-				points[0].x = penX;
-				points[0].y = penY;
+          // First point (Starts with the word bounds)
+          penX = winx;
+          switch (getSlope(winx, 0, ww)) {
+            case UNDERCURL_SLOPE_ASCENDING:
+              penY = wy + wh/2.f - marginStart;
+              break;
+            case UNDERCURL_SLOPE_TOP_CAP:
+              penY = wy;
+              break;
+            case UNDERCURL_SLOPE_DESCENDING:
+              penY = wy + marginStart;
+              break;
+            case UNDERCURL_SLOPE_BOTTOM_CAP:
+              penY = wy + wh/2.f;
+              break;
+          }
+          points[0].x = penX;
+          points[0].y = penY;
 
-				// Second point (Goes back to the absolute point coordinates)
-				switch (getSlope(winx, 1, ww)) {
-					case UNDERCURL_SLOPE_ASCENDING:
-						penX += ww * (1.f/6.f) - marginStart;
-						penY += 0;
-						break;
-					case UNDERCURL_SLOPE_TOP_CAP:
-						penX += ww * (2.f/6.f) - marginStart;
-						penY += -wh/2.f + marginStart;
-						break;
-					case UNDERCURL_SLOPE_DESCENDING:
-						penX += ww * (1.f/6.f) - marginStart;
-						penY += 0;
-						break;
-					case UNDERCURL_SLOPE_BOTTOM_CAP:
-						penX += ww * (2.f/6.f) - marginStart;
-						penY += -marginStart + wh/2.f;
-						break;
-				}
-				points[1].x = penX;
-				points[1].y = penY;
+          // Second point (Goes back to the absolute point coordinates)
+          switch (getSlope(winx, 1, ww)) {
+            case UNDERCURL_SLOPE_ASCENDING:
+              penX += ww * (1.f/6.f) - marginStart;
+              penY += 0;
+              break;
+            case UNDERCURL_SLOPE_TOP_CAP:
+              penX += ww * (2.f/6.f) - marginStart;
+              penY += -wh/2.f + marginStart;
+              break;
+            case UNDERCURL_SLOPE_DESCENDING:
+              penX += ww * (1.f/6.f) - marginStart;
+              penY += 0;
+              break;
+            case UNDERCURL_SLOPE_BOTTOM_CAP:
+              penX += ww * (2.f/6.f) - marginStart;
+              penY += -marginStart + wh/2.f;
+              break;
+          }
+          points[1].x = penX;
+          points[1].y = penY;
 
-				// The rest of the points
-				for (int i = 2; i < npoints; i++) {
-					switch (getSlope(winx, i, ww)) {
-						case UNDERCURL_SLOPE_ASCENDING:
-						case UNDERCURL_SLOPE_DESCENDING:
-							penX += ww * (1.f/6.f);
-							penY += 0;
-							break;
-						case UNDERCURL_SLOPE_TOP_CAP:
-							penX += ww * (2.f/6.f);
-							penY += -wh / 2.f;
-							break;
-						case UNDERCURL_SLOPE_BOTTOM_CAP:
-							penX += ww * (2.f/6.f);
-							penY += wh / 2.f;
-							break;
-					}
-					points[i].x = penX;
-					points[i].y = penY;
-				}
+          // The rest of the points
+          for (int i = 2; i < npoints; i++) {
+            switch (getSlope(winx, i, ww)) {
+              case UNDERCURL_SLOPE_ASCENDING:
+              case UNDERCURL_SLOPE_DESCENDING:
+                penX += ww * (1.f/6.f);
+                penY += 0;
+                break;
+              case UNDERCURL_SLOPE_TOP_CAP:
+                penX += ww * (2.f/6.f);
+                penY += -wh / 2.f;
+                break;
+              case UNDERCURL_SLOPE_BOTTOM_CAP:
+                penX += ww * (2.f/6.f);
+                penY += wh / 2.f;
+                break;
+            }
+            points[i].x = penX;
+            points[i].y = penY;
+          }
 
-				// End
-				float waveLength = penX - winx;
-				if (waveLength < width) { // Add a bonus point?
-					int marginEnd = width - waveLength;
-					penX += marginEnd;
-					switch(getSlope(winx, npoints, ww)) {
-						case UNDERCURL_SLOPE_ASCENDING:
-						case UNDERCURL_SLOPE_DESCENDING:
-							//penY += 0;
-							break;
-						case UNDERCURL_SLOPE_TOP_CAP:
-							penY += -marginEnd;
-							break;
-						case UNDERCURL_SLOPE_BOTTOM_CAP:
-							penY += marginEnd;
-							break;
-					}
+          // End
+          float waveLength = penX - winx;
+          if (waveLength < width) { // Add a bonus point?
+            int marginEnd = width - waveLength;
+            penX += marginEnd;
+            switch(getSlope(winx, npoints, ww)) {
+              case UNDERCURL_SLOPE_ASCENDING:
+              case UNDERCURL_SLOPE_DESCENDING:
+                //penY += 0;
+                break;
+              case UNDERCURL_SLOPE_TOP_CAP:
+                penY += -marginEnd;
+                break;
+              case UNDERCURL_SLOPE_BOTTOM_CAP:
+                penY += marginEnd;
+                break;
+            }
 
-					points[npoints].x = penX;
-					points[npoints].y = penY;
+            points[npoints].x = penX;
+            points[npoints].y = penY;
 
-					npoints++;
-				} else if (waveLength > width) { // Is last point too far?
-					int marginEnd = waveLength - width;
-					points[npoints-1].x -= marginEnd;
-					switch(getSlope(winx, npoints-1, ww)) {
-						case UNDERCURL_SLOPE_TOP_CAP:
-							points[npoints-1].y += marginEnd;
-							break;
-						case UNDERCURL_SLOPE_BOTTOM_CAP:
-							points[npoints-1].y -= marginEnd;
-							break;
-						default:
-							break;
-					}
-				}
+            npoints++;
+          } else if (waveLength > width) { // Is last point too far?
+            int marginEnd = waveLength - width;
+            points[npoints-1].x -= marginEnd;
+            switch(getSlope(winx, npoints-1, ww)) {
+              case UNDERCURL_SLOPE_TOP_CAP:
+                points[npoints-1].y += marginEnd;
+                break;
+              case UNDERCURL_SLOPE_BOTTOM_CAP:
+                points[npoints-1].y -= marginEnd;
+                break;
+              default:
+                break;
+            }
+          }
 
-				// Draw the lines
-				XDrawLines(xw.dpy, XftDrawDrawable(xw.draw), ugc, points, npoints,
-						CoordModeOrigin);
+          // Draw the lines
+          XDrawLines(xw.dpy, XftDrawDrawable(xw.draw), ugc, points, npoints,
+              CoordModeOrigin);
 
-				// Draw a second underline with an offset of 1 pixel
-				if ( ((win.ch / (widthThreshold/2)) % 2)) {
-					for (int i = 0; i < npoints; i++)
-						points[i].x++;
+          // Draw a second underline with an offset of 1 pixel
+          if ( ((win.ch / (widthThreshold/2)) % 2)) {
+            for (int i = 0; i < npoints; i++)
+              points[i].x++;
 
-					XDrawLines(xw.dpy, XftDrawDrawable(xw.draw), ugc, points,
-							npoints, CoordModeOrigin);
-				}
+            XDrawLines(xw.dpy, XftDrawDrawable(xw.draw), ugc, points,
+                npoints, CoordModeOrigin);
+          }
 
-				// Free resources
-				free(points);
-			}
+          // Free resources
+          free(points);
+        }
 #endif
+      }
+
+      XFreeGC(xw.dpy, ugc);
+
+    }
+
+
+  	if (base.mode & ATTR_STRUCK) {
+			XftDrawRect(xw.draw, fg, winx, winy + win.cyo + 2 * dc.font.ascent / 3,
+					width, 1);
 		}
-
-		XFreeGC(xw.dpy, ugc);
-
-	}
-
-	if (base.mode & ATTR_STRUCK) {
-//		XftDrawRect(xw.draw, fg, winx, winy + 2 * dc.font.ascent / 3,
-		XftDrawRect(xw.draw, fg, winx, winy + win.cyo + 2 * dc.font.ascent / 3,
-				width, 1);
-	}
+  }
 
 	/* Reset clip to none. */
 	XftDrawSetClip(xw.draw, 0);
@@ -2092,7 +2092,7 @@ xdrawglyph(Glyph g, int x, int y)
 	XftGlyphFontSpec spec;
 
 	numspecs = xmakeglyphfontspecs(&spec, &g, 1, x, y);
-	xdrawglyphfontspecs(&spec, g, numspecs, x, y);
+	xdrawglyphfontspecs(&spec, g, numspecs, x, y, DRAW_BG | DRAW_FG);
 }
 
 void
@@ -2291,32 +2291,39 @@ xstartdraw(void)
 void
 xdrawline(Line line, int x1, int y1, int x2)
 {
-	int i, x, ox, numspecs;
+	int i, x, ox, numspecs, numspecs_cached;
 	Glyph base, new;
-	XftGlyphFontSpec *specs = xw.specbuf;
+	XftGlyphFontSpec *specs;
 
-	numspecs = xmakeglyphfontspecs(specs, &line[x1], x2 - x1, x1, y1);
-	i = ox = 0;
-	for (x = x1; x < x2 && i < numspecs; x++) {
-		new = line[x];
-		if (new.mode == ATTR_WDUMMY)
-			continue;
-		if (selected(x, y1))
-			new.mode ^= ATTR_REVERSE;
-		if (i > 0 && ATTRCMP(base, new)) {
-			xdrawglyphfontspecs(specs, base, i, ox, y1);
-			specs += i;
-			numspecs -= i;
-			i = 0;
+	numspecs_cached = xmakeglyphfontspecs(xw.specbuf, &line[x1], x2 - x1, x1, y1);
+
+	/* Draw line in 2 passes: background and foreground. This way wide glyphs
+	   won't get truncated (#223) */
+	for (int dmode = DRAW_BG; dmode <= DRAW_FG; dmode <<= 1) {
+		specs = xw.specbuf;
+		numspecs = numspecs_cached;
+		i = ox = 0;
+		for (x = x1; x < x2 && i < numspecs; x++) {
+			new = line[x];
+			if (new.mode == ATTR_WDUMMY)
+				continue;
+			if (selected(x, y1))
+				new.mode ^= ATTR_REVERSE;
+			if (i > 0 && ATTRCMP(base, new)) {
+				xdrawglyphfontspecs(specs, base, i, ox, y1, dmode);
+				specs += i;
+				numspecs -= i;
+				i = 0;
+			}
+			if (i == 0) {
+				ox = x;
+				base = new;
+			}
+			i++;
 		}
-		if (i == 0) {
-			ox = x;
-			base = new;
-		}
-		i++;
+		if (i > 0)
+			xdrawglyphfontspecs(specs, base, i, ox, y1, dmode);
 	}
-	if (i > 0)
-		xdrawglyphfontspecs(specs, base, i, ox, y1);
 }
 
 void
@@ -2880,6 +2887,7 @@ run:
 	if (!opt_title)
 		opt_title = (opt_line || !opt_cmd) ? "st" : opt_cmd[0];
 
+  
 	setlocale(LC_CTYPE, "");
 	XSetLocaleModifiers("");
   xrdb_load();
