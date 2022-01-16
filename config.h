@@ -232,8 +232,8 @@ static unsigned int mousebg = 0;
  **********************************************************************************/
 
 
-static unsigned int cols = 192;
-static unsigned int rows = 43;
+static unsigned int cols = 100;
+static unsigned int rows = 40;
 //unsigned int const buffSize = 255;
 
 
@@ -263,14 +263,14 @@ static MouseShortcut mshortcuts[] = {
 	{ ShiftMask,           Button2, clippaste,       {.i = 0},         0},
 	{ XK_ANY_MOD,          Button2, clipcopy,       {.i = 0},          0},
 
-	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
-//	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
-	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
+	{ ShiftMask,           Button4, ttysend,        {.s = "\033[5;2~"} },
+//	{ XK_ANY_MOD,          Button4, ttysend,        {.s = "\031"} },
+	{ ShiftMask,           Button5, ttysend,        {.s = "\033[6;2~"} },
 
-//	{ XK_ANY_MOD,           Button3, clipcopy,       {.i =  0} },
+//	{ XK_ANY_MOD,          Button3, clipcopy,       {.i =  0} },
 
-	{ XK_ANY_MOD,           Button4, kscrollup,      {.i = +1} },
-	{ XK_ANY_MOD,           Button5, kscrolldown,    {.i = +1} },
+	{ XK_ANY_MOD,          Button4, kscrollup,      {.i = +1} },
+	{ XK_ANY_MOD,          Button5, kscrolldown,    {.i = +1} },
 };
 
 /**********************************************************************************

@@ -1595,7 +1595,7 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 	    width = charlen * win.cw;
 	Color *fg, *bg, *temp, revfg, revbg, truefg, truebg;
 	XRenderColor colfg, colbg;
-	// XRectangle r;
+	XRectangle r;
 
 	/* Fallback on color display for attributes not supported by the font */
 	if (base.mode & ATTR_ITALIC && base.mode & ATTR_BOLD) {
@@ -1699,6 +1699,14 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
   /* Fill the background */
 	XftDrawRect(xw.draw, bg, winx, winy, width, win.ch);
   }
+
+   /* Set the clip region because Xft is sometimes dirty. */
+   r.x = 0;
+   r.y = 0;
+   r.height = win.ch;
+   //r.width = width;
+  XftDrawSetClipRectangles(xw.draw, winx, winy, &r, 1);
+
 
   if (dmode & DRAW_FG) {
 
