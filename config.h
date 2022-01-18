@@ -23,7 +23,7 @@ static int ligatures = 1;
 
 
 /**********************************************************************************
- * What program is execed by st depends of these precedence rules:
+ * What program is execed by flarity depends of these precedence rules:
  *   1: program passed with -e
  *   2: scroll and/or utmp
  *   3: SHELL environment variable
@@ -68,7 +68,7 @@ int allowwindowops = 0;
 
 /*
  * draw latency range in ms - from new content/keypress/etc until drawing.
- * within this range, st draws when content stops arriving (idle). mostly it's
+ * within this range, flarity draws when content stops arriving (idle). mostly it's
  * near minlatency, but it waits longer for slow updates to avoid partial draw.
  * low minlatency will tear/flicker more, as it can "detect" idle too early.
  */
@@ -131,7 +131,7 @@ char *termname = "st-256color";
  *
  * When you are changing this value, don't forget to adapt the »it« value in
  * the st.info and appropriately install the st.info in the environment where
- * you use this st version.
+ * you use this flarity version.
  *
  *	it#$tabspaces,
  *
@@ -211,8 +211,8 @@ static unsigned int defaultrcs = 257;
 + * 4: Steady underline ("_")
 + * 5: Blinking bar
 + * 6: Steady bar ("|")
-+ * 7: Blinking st cursor
-+ * 8: Steady st cursor
++ * 7: Blinking flarity cursor
++ * 8: Steady flarity cursor
 
  *
  *  Default colour and shape of the mouse cursor
@@ -313,8 +313,8 @@ static Shortcut shortcuts[] = {
 //	{ ControlMask|ShiftMask,          XK_Left, ttysend,   {.s = "\033[21;5~\033[23;5~\033[24;5~"} },
 //	{ ControlMask|ShiftMask,          XK_Right, ttysend,  {.s = "\033[24;5~\033[23;5~"} },
 
-  { ShiftMask,            XK_BackSpace,   newterm,        {.v = "st_float"} },
-  { ShiftMask,            XK_Return,      newterm,        {.v ="st"} },
+  //{ ShiftMask,            XK_BackSpace,   newterm,        {.v = "flarity", .t = "float" } },
+  { ShiftMask,            XK_Return,      newterm,        {.v = "flarity" } },
 
 
    /*******************************************************************************
@@ -356,7 +356,7 @@ static Shortcut shortcuts[] = {
  * * > 0: cursor application mode enabled
  * * < 0: cursor application mode disabled
  *
- * Be careful with the order of the definitions because st searches in
+ * Be careful with the order of the definitions because flarity searches in
  * this table sequentially, so any XK_ANY_MOD must be in the last
  * position for a key.
  */

@@ -18,7 +18,7 @@
 
 char *argv0;
 #include "arg.h"
-#include "st.h"
+#include "flarity.h"
 #include "win.h"
 #include "hb.h"
 
@@ -2196,11 +2196,11 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og, Line line, int le
 					win.vborderpx + cy * win.ch,
 					cursorthickness, win.ch);
 			break;
-		case 7: /* Blinking st cursor */
+		case 7: /* Blinking flarity cursor */
 			if (IS_SET(MODE_BLINK))
 				break;
 			/* FALLTHROUGH */
-		case 8: /* Steady st cursor */
+		case 8: /* Steady flarity cursor */
 			g.u = stcursor;
 			xdrawglyph(g, cx, cy);
 			break;

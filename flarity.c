@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <wchar.h>
 
-#include "st.h"
+#include "flarity.h"
 #include "win.h"
 
 #if   defined(__linux)
@@ -1263,7 +1263,7 @@ newterm(const Arg* arg)
 		break;
 	case 0:
 		chdir(getcwd_by_pid(pid));
-		execlp(arg->v, arg->v, NULL);
+  	execlp(arg->v, arg->v, NULL);
 		break;
 	}
 }

@@ -4,7 +4,7 @@
  */
 
 #include <X11/Xft/Xft.h>
-#include "st.h"
+#include "flarity.h"
 #include "boxdraw_data.h"
 
 /* Rounded non-negative integers division of n / d  */

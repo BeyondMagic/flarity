@@ -5,7 +5,7 @@
 #include <hb.h>
 #include <hb-ft.h>
 
-#include "st.h"
+#include "flarity.h"
 
 void hbtransformsegment(XftFont *xfont, const Glyph *string, hb_codepoint_t *codepoints, int start, int length);
 hb_font_t *hbfindfont(XftFont *match);

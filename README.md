@@ -1,20 +1,19 @@
-<h1 align="center">st - simple terminal</h1>
+<h1 align="center">flarity - A personal terminal emulator.</h1>
 
 <img align="center" src="/.github/preview.png">
 
-<p align="center">st is a simple terminal emulator for X which sucks less.</p>
+<p align="center">flarity is a fork of st constrained with usability as the main goal of it.</p>
 
 ---
 
 ### Keybinds
 
 + **Normal** scroll with mouse and `Alt+Up` and `Alt+Down`;
-+ Bigger scroll with `Alt+PageUp` and `Alt+PageDown`;
++ Greater scroll with `Alt+PageUp` and `Alt+PageDown`;
 + `Ctrl+Shift+V` to paste text;
 + `Ctrl+Shift+C` or `Middle Button of Mouse` copies the selected text;
 + `Shift+Enter` opens a new terminal in the same path;
-+ `Shift+Backspace` opens a new floating terminal in the same path, you should change the variable path to the st with floating title.
-	- [Script that I'm using](https://github.com/BeyondMagic/scripts/blob/master/terminal/st_float);
++ `Shift+Backspace` opens a new terminal with the title "float" so that the window manager can make it float.
 + `Shift + Middle Button of Mouse` pastes copied text
 + `CTRL+Backspace` returns `F36+F35` sequence, I use this on **nvim** and **zsh**. It's preferable compared to 
 	- `noremap! <F36><F35> <C-w>` nvim
@@ -49,41 +48,41 @@ Example file:
 `st.font_fallback` is used for font2, multiple ones are divided by `,`.
 
 ```
-st.font           : Fira Code:pixelsize=12.25:antialias=true
-st.font_fallback  : Fira Code Nerd Font Mono:style=Regular:pixelsize=13:antialias=true,Material\\-Design\\-Iconic\\-Font:style=Design-Iconic-Font:pixelsize=12,JoyPixels:pixelsize=13
-st.termname       : st-256color
-st.blinktimeout   : 500
-st.bellvolume     : 0
-st.padding        : 17
-st.cursorshape    : 5
-st.cwscale        : 0.875
-st.chscale        : 0.875
-st.opacity        : 0.875
-st.ligatures      : 1
-st.color0         : #000020
-st.color1         : #EC5E66
-st.color2         : #009900
-st.color3         : #FAC863
-st.color4         : #6699CC
-st.color5         : #D75F86
-st.color6         : #357CD5
-st.color7         : #FDFCFD
-st.color8         : #424043
-st.color9         : #ED2E62
-st.color10        : #5CBF53
-st.color11        : #F3D353
-st.color12        : #65D9EF
-st.color13        : #FA74CE
-st.color14        : #519FD1
-st.color15        : #FFFFFF
-st.color255       : #000020
-st.color256       : #111111
-st.color257       : #ffffff
-st.color258       : #0A0C11
-st.foreground     : #FDFCFD
-st.background     : #0a0c11
-st.cursorfg       : #111111
-st.reverse-cursor : #ffffff
+flarity.font           : Fira Code:pixelsize=12.25:antialias=true
+flarity.font_fallback  : Fira Code Nerd Font Mono:style=Regular:pixelsize=13:antialias=true,Material\\-Design\\-Iconic\\-Font:style=Design-Iconic-Font:pixelsize=12,JoyPixels:pixelsize=13
+flarity.termname       : flarity-256color
+flarity.blinktimeout   : 500
+flarity.bellvolume     : 0
+flarity.padding        : 17
+flarity.cursorshape    : 5
+flarity.cwscale        : 0.875
+flarity.chscale        : 0.875
+flarity.opacity        : 0.875
+flarity.ligatures      : 1
+flarity.color0         : #000020
+flarity.color1         : #EC5E66
+flarity.color2         : #009900
+flarity.color3         : #FAC863
+flarity.color4         : #6699CC
+flarity.color5         : #D75F86
+flarity.color6         : #357CD5
+flarity.color7         : #FDFCFD
+flarity.color8         : #424043
+flarity.color9         : #ED2E62
+flarity.color10        : #5CBF53
+flarity.color11        : #F3D353
+flarity.color12        : #65D9EF
+flarity.color13        : #FA74CE
+flarity.color14        : #519FD1
+flarity.color15        : #FFFFFF
+flarity.color255       : #000020
+flarity.color256       : #111111
+flarity.color257       : #ffffff
+flarity.color258       : #0A0C11
+flarity.foreground     : #FDFCFD
+flarity.background     : #0a0c11
+flarity.cursorfg       : #111111
+flarity.reverse-cursor : #ffffff
 ```
 
 Apply the changes to Xorg.
@@ -92,17 +91,17 @@ Apply the changes to Xorg.
 xrdb ~/.config/xorg/XResources
 ```
 
-Apply the changes to St instances.
+Apply the changes to flarity instances.
 
 ```bash
-kill -USR1 $(pidof st)
+kill -USR1 $(pidof flarity)
 ```
 
 ---
 
 ### Support
 
-+ coloured undercurl (apply the st.info for external programs)
++ coloured undercurl (apply the flarity.info for external programs)
 	- sequence is 4:3, 4:0 to reset
 + history (default: 2000 lines)
 + Emojis 
@@ -123,11 +122,11 @@ Clone somewhere in your system:
 
 ```
 $ git clone https://github.com/beyondmagic/st
-$ cd st
+$ cd flarity
 $ make install
-$ st
+$ flarity
 ```
 
-If you want to, edit `config.mk` to match your local setup (st is installed into the /usr/local namespace by default).
+If you want to, edit `config.mk` to match your local setup (flarity is installed into the /usr/local namespace by default).
 
-Then run `tic -x -o ~/.terminfo st.info` to have support in multiple terminal programs that use undercurls, ...
+Then run `tic -x -o ~/.terminfo flarity.info` to have support in multiple terminal programs that use undercurls, ...

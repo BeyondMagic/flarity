@@ -1,5 +1,5 @@
-# st version
-VERSION = 0.8.4
+# flarity version
+VERSION = 1.0.0
 
 # Customize below to fit your system
 

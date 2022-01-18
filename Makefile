@@ -1,16 +1,16 @@
-# st - simple terminal
+# flarity - A personal terminal emulator.
 # See LICENSE file for copyright and license details.
 .POSIX:
 
 include config.mk
 
-SRC = st.c x.c boxdraw.c hb.c
+SRC = flarity.c x.c boxdraw.c hb.c
 OBJ = $(SRC:.c=.o)
 
-all: options st
+all: options flarity
 
 options:
-	@echo st build options:
+	@echo flarity build options:
 	@echo "CFLAGS  = $(STCFLAGS)"
 	@echo "LDFLAGS = $(STLDFLAGS)"
 	@echo "CC      = $(CC)"
@@ -21,39 +21,39 @@ config.h:
 .c.o:
 	$(CC) $(STCFLAGS) -c $<
 
-st.o: config.h st.h win.h
-x.o: arg.h config.h st.h win.h hb.h
-hb.o: st.h
-boxdraw.o: config.h st.h boxdraw_data.h
+flarity.o: config.h flarity.h win.h
+x.o: arg.h config.h flarity.h win.h hb.h
+hb.o: flarity.h
+boxdraw.o: config.h flarity.h boxdraw_data.h
 
 $(OBJ): config.h config.mk
 
-st: $(OBJ)
+flarity: $(OBJ)
 	$(CC) -o $@ $(OBJ) $(STLDFLAGS)
 
 clean:
-	rm -f st $(OBJ) st-$(VERSION).tar.gz
+	rm -f flarity $(OBJ) flarity-$(VERSION).tar.gz
 
 dist: clean
-	mkdir -p st-$(VERSION)
+	mkdir -p flarity-$(VERSION)
 	cp -R FAQ LEGACY TODO LICENSE Makefile README config.mk\
-		config.def.h st.info st.1 arg.h st.h win.h $(SRC)\
-		st-$(VERSION)
-	tar -cf - st-$(VERSION) | gzip > st-$(VERSION).tar.gz
-	rm -rf st-$(VERSION)
+		config.def.h flarity.info flarity.1 arg.h flarity.h win.h $(SRC)\
+		flarity-$(VERSION)
+	tar -cf - flarity-$(VERSION) | gzip > flarity-$(VERSION).tar.gz
+	rm -rf flarity-$(VERSION)
 
-install: st
+install: flarity
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	cp -f st $(DESTDIR)$(PREFIX)/bin
-	chmod 755 $(DESTDIR)$(PREFIX)/bin/st
+	cp -f flarity $(DESTDIR)$(PREFIX)/bin
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/flarity
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
-	sed "s/VERSION/$(VERSION)/g" < st.1 > $(DESTDIR)$(MANPREFIX)/man1/st.1
-	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/st.1
-	tic -sx st.info
-	@echo Please see the README file regarding the terminfo entry of st.
+	sed "s/VERSION/$(VERSION)/g" < flarity.1 > $(DESTDIR)$(MANPREFIX)/man1/flarity.1
+	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/flarity.1
+	tic -sx flarity.info
+	@echo Please see the README file regarding the terminfo entry of flarity.
 
 uninstall:
-	rm -f $(DESTDIR)$(PREFIX)/bin/st
-	rm -f $(DESTDIR)$(MANPREFIX)/man1/st.1
+	rm -f $(DESTDIR)$(PREFIX)/bin/flarity
+	rm -f $(DESTDIR)$(MANPREFIX)/man1/flarity.1
 
 .PHONY: all options clean dist install uninstall
