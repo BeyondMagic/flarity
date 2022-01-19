@@ -2799,8 +2799,6 @@ xrdb_load(void)
 		  defaultrcs = defaultbg;
 		}
 
-		XRESOURCE_LOAD_STRING("termname", termname);
-
 		/* XRESOURCE_LOAD_INTEGER("xfps", xfps); */
 		/* XRESOURCE_LOAD_INTEGER("actionfps", actionfps); */
 		XRESOURCE_LOAD_INTEGER("blinktimeout", blinktimeout);
@@ -2847,7 +2845,7 @@ reload(int sig)
 	redraw();
 
 	/* triggers re-render if we're visible. */
-	//ttywrite("\033[O", 3, 1);
+	ttywrite("\033[O", 3, 1);
 
 	signal(SIGUSR1, reload);
 }

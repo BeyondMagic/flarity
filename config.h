@@ -123,11 +123,8 @@ static int bellvolume = 0;
  * TERM name
  **********************************************************************************/
 
-
-// lemme tell you that this is not useless and I find it lovely with a script that randomizes the geometry, ok
-char *float_terminal = "flarity_float";
 // default TERM value
-char *termname = "flarity-256color";
+char *termname = "st-256color";
 
 
 /**********************************************************************************
