@@ -70,6 +70,7 @@ static void zoom(const Arg *);
 static void zoomabs(const Arg *);
 static void zoomreset(const Arg *);
 static void ttysend(const Arg *);
+static void cyclefonts(const Arg *);
 
 /* config.h for applying patches and the configuration. */
 #include "config.h"
@@ -78,7 +79,8 @@ static void ttysend(const Arg *);
 #define TITLESTACKSIZE 8
 
 /* Calculate count of spare fonts */
-int fc;
+int fc = sizeof(font_fallback) / sizeof(*font_fallback);
+int fm = sizeof(fonts) / sizeof(*fonts);
 
 /* XEMBED messages */
 #define XEMBED_FOCUS_IN  4
@@ -334,9 +336,7 @@ zoomabs(const Arg *arg)
 {
 	xunloadfonts();
 	xloadfonts(usedfont, arg->f);
-  fc--;
 	xloadsparefonts();
-  fc++;
 	cresize(0, 0);
 	redraw();
 	xhints();
@@ -1017,6 +1017,17 @@ xloadfont(Font *f, FcPattern *pattern)
 }
 
 void
+cyclefonts(const Arg *dummy)
+{
+  zoomreset(dummy);
+	fonts_current++;
+	if (fonts_current >= fm) fonts_current = 0;
+	usedfont = fonts[fonts_current];
+	xloadfonts(usedfont, 0);
+	redraw();
+}
+
+void
 xloadfonts(char *fontstr, double fontsize)
 {
 	FcPattern *pattern;
@@ -1116,7 +1127,7 @@ xloadsparefonts(void)
 {
 	FcPattern *pattern;
 	double sizeshift, fontval;
-	char **fp;
+  char ** fp;
 
 	if (frclen != 0)
 		die("can't embed spare fonts. cache isn't empty");
@@ -1130,7 +1141,7 @@ xloadsparefonts(void)
 		frc = xrealloc(frc, frccap * sizeof(Fontcache));
 	}
 
-	for (fp = font2; fp - font2 < fc; ++fp) {
+	for (fp = font_fallback; fp - font_fallback < fc; ++fp) {
 	
 		if (**fp == '-')
 			pattern = XftXlfdParse(*fp, False, False);
@@ -1292,7 +1303,8 @@ xinit(int cols, int rows)
 	if (!FcInit())
 		die("could not init fontconfig.\n");
 
-	usedfont = (opt_font == NULL)? font : opt_font;
+
+	usedfont = fonts[fonts_current];
 	xloadfonts(usedfont, 0);
 
 	/* colors */
@@ -1394,6 +1406,7 @@ xinit(int cols, int rows)
 		xsel.xtarget = XA_STRING;
 
 	boxdraw_xinit(xw.dpy, xw.cmap, xw.draw, xw.vis);
+
 }
 
 int
@@ -2677,7 +2690,7 @@ run(void)
 }
 
 #define XRESOURCE_LOAD_META(NAME)					\
-	if(!XrmGetResource(xrdb, "st." NAME, "st." NAME, &type, &ret))	\
+	if(!XrmGetResource(xrdb, "flarity." NAME, "flarity." NAME, &type, &ret))	\
 		XrmGetResource(xrdb, "*." NAME, "*." NAME, &type, &ret); \
 	if (ret.addr != NULL && !strncmp("String", type, 64))
 
@@ -2736,20 +2749,38 @@ xrdb_load(void)
 		}
 
     XRESOURCE_LOAD_META("font_fallback") {
-      int count = 0, endchar = fc = sizeof(font2) / sizeof(*font2);
+      int count = 0, endchar = fc = sizeof(font_fallback) / sizeof(*font_fallback);
       for (int i = 0; ret.addr[i]; i++) if (ret.addr[i] == ',') count++;
       if (count > 0)
       {
         for (int i = 0; i <= count; i++)
         {
-          if (i == 0) font2[endchar + i] = strtok(ret.addr, ",");
-          else        font2[endchar + i] = strtok(NULL, ",");
+          if (i == 0) font_fallback[endchar + i] = strtok(ret.addr, ",");
+          else        font_fallback[endchar + i] = strtok(NULL, ",");
           fc++;
         }
-        font2[endchar + count + 1] = '\0';
+        font_fallback[endchar + count + 1] = '\0';
       } else {
-        font2[endchar] = ret.addr;
+        font_fallback[endchar] = ret.addr;
         fc++;
+      }
+    }
+
+    XRESOURCE_LOAD_META("fonts") {
+      int count = 0, endchar = fm = sizeof(fonts) / sizeof(*fonts);
+      for (int i = 0; ret.addr[i]; i++) if (ret.addr[i] == ',') count++;
+      if (count > 0)
+      {
+        for (int i = 0; i <= count; i++)
+        {
+          if   (i == 0) fonts[endchar + i] = strtok(ret.addr, ",");
+          else          fonts[endchar + i] = strtok(NULL, ",");
+          fm++;
+        }
+        fonts[endchar + count + 1] = '\0';
+      } else {
+        fonts[endchar] = ret.addr;
+        fm++;
       }
     }
 
@@ -2768,7 +2799,6 @@ xrdb_load(void)
 		  defaultrcs = defaultbg;
 		}
 
-		XRESOURCE_LOAD_STRING("font", font);
 		XRESOURCE_LOAD_STRING("termname", termname);
 
 		/* XRESOURCE_LOAD_INTEGER("xfps", xfps); */
@@ -2803,11 +2833,12 @@ void
 reload(int sig)
 {
 	xrdb_load();
+  xsetcursor(cursorshape);
 
 	/* colors, fonts */
 	xloadcols();
 	xunloadfonts();
-	xloadfonts(font, 0);
+	xloadfonts(usedfont, 0);
   xloadsparefonts();
 
 	/* pretend the window just got resized */
@@ -2816,7 +2847,7 @@ reload(int sig)
 	redraw();
 
 	/* triggers re-render if we're visible. */
-	ttywrite("\033[O", 3, 1);
+	//ttywrite("\033[O", 3, 1);
 
 	signal(SIGUSR1, reload);
 }
@@ -2908,7 +2939,6 @@ run:
 
 	xsetenv();
 	selinit();
-	xrdb_load();
 	run();
 
 	return 0;

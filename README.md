@@ -8,13 +8,14 @@
 
 ### Keybinds
 
-+ **Normal** scroll with mouse and `Alt+Up` and `Alt+Down`;
++ Normal scroll with mouse and `Alt+Up` and `Alt+Down`;
 + Greater scroll with `Alt+PageUp` and `Alt+PageDown`;
 + `Ctrl+Shift+V` to paste text;
 + `Ctrl+Shift+C` or `Middle Button of Mouse` copies the selected text;
 + `Shift+Enter` opens a new terminal in the same path;
 + `Shift+Backspace` opens a new terminal with the title "float" so that the window manager can make it float.
-+ `Shift + Middle Button of Mouse` pastes copied text
++ `Middle Button of Mouse` copies selected text.
++ `Shift + Middle Button of Mouse` pastes copied text.
 + `CTRL+Backspace` returns `F36+F35` sequence, I use this on **nvim** and **zsh**. It's preferable compared to 
 	- `noremap! <F36><F35> <C-w>` nvim
 	- `inoremap <F36><F35> <C-w>` nvim
@@ -38,6 +39,7 @@
 + [live-reload-xresources](https://github.com/gnotclub/xst/commit/c0ffcfbaf8af25468103dd92e0c7e83555e08c7a)
 + [blinking-cursor](https://st.suckless.org/patches/blinking_cursor/)
 + [glyph-wide-support](https://github.com/LukeSmithxyz/st/commit/e3b821dcb3511d60341dec35ee05a4a0abfef7f2)
++ [cyclefonts](https://st.suckless.org/patches/cyclefonts/) custom
 
 ---
 
@@ -45,44 +47,49 @@
 
 Example file:
 
-`st.font_fallback` is used for font2, multiple ones are divided by `,`.
-
 ```
-flarity.font           : Fira Code:pixelsize=12.25:antialias=true
-flarity.font_fallback  : Fira Code Nerd Font Mono:style=Regular:pixelsize=13:antialias=true,Material\\-Design\\-Iconic\\-Font:style=Design-Iconic-Font:pixelsize=12,JoyPixels:pixelsize=13
-flarity.termname       : flarity-256color
-flarity.blinktimeout   : 500
-flarity.bellvolume     : 0
-flarity.padding        : 17
-flarity.cursorshape    : 5
-flarity.cwscale        : 0.875
-flarity.chscale        : 0.875
-flarity.opacity        : 0.875
-flarity.ligatures      : 1
-flarity.color0         : #000020
-flarity.color1         : #EC5E66
-flarity.color2         : #009900
-flarity.color3         : #FAC863
-flarity.color4         : #6699CC
-flarity.color5         : #D75F86
-flarity.color6         : #357CD5
-flarity.color7         : #FDFCFD
-flarity.color8         : #424043
-flarity.color9         : #ED2E62
-flarity.color10        : #5CBF53
-flarity.color11        : #F3D353
-flarity.color12        : #65D9EF
-flarity.color13        : #FA74CE
-flarity.color14        : #519FD1
-flarity.color15        : #FFFFFF
-flarity.color255       : #000020
-flarity.color256       : #111111
-flarity.color257       : #ffffff
-flarity.color258       : #0A0C11
-flarity.foreground     : #FDFCFD
-flarity.background     : #0a0c11
-flarity.cursorfg       : #111111
-flarity.reverse-cursor : #ffffff
+! Flarity default config:
+!
+! Fonts:
+!   Coding:           FiraCode NF:                        https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/FiraCode/
+!   Writing:          agave NF:                           https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Agave/
+!   Japanese support: Noto Sans CJK JP                    https://fonts.google.com/noto/specimen/Noto+Sans+JP
+!   Icons support:    Material\\-Design\\-Iconic\\-Font   https://github.com/google/material-design-icons
+!   Emojis support:   JoyPixels                           https://www.joypixels.com/
+!   UNICODE support:  Unifont-JP                          http://unifoundry.com/unifont/
+
+! Cycle main fonts.
+flarity.fonts         : JetBrainsMono Nerd Font:style:medium:pixelsize=15:pixelsize=12.25:antialias=true,agave NF:style=r:pixelsize=17:antialias=true
+
+! Fonts fallback.
+flarity.font_fallback : Noto Sans CJK JP:style=Regular:pixelsize=14:antialias=true,Material\\-Design\\-Iconic\\-Font:style=Design-Iconic-Font:pxelsize=16.25,JoyPixels:pixelsize=14,
+
+! Name of the terminal.
+flarity.termname      : flarity-256color
+
+! Time between blinks of the cursor.
+flarity.blinktimeout  : 500
+
+! ...
+flarity.bellvolume    : 0
+
+! Padding between the borders of the terminal.
+flarity.padding       : 16
+
+! Shape of the curosr.
+flarity.cursorshape   : 5
+
+! Character width scale.
+flarity.cwscale       : 0.876
+
+! Character height scale.
+flarity.chscale       : 0.925
+
+! Opacity of the terminal background.
+flarity.opacity       : 1
+
+! If ligatures are enabled or not.
+flarity.ligatures     : 1
 ```
 
 Apply the changes to Xorg.
@@ -121,9 +128,9 @@ First, install this package in your system: `libxft-bgra`.
 Clone somewhere in your system:
 
 ```
-$ git clone https://github.com/beyondmagic/st
+$ git clone https://github.com/beyondmagic/flarity
 $ cd flarity
-$ make install
+# make install
 $ flarity
 ```
 

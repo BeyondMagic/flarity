@@ -1249,7 +1249,7 @@ kscrollup(const Arg* a)
 		term.scr = term.histf;
 	}
 
-	if (sel.ob.x != -1 && !sel.alt)
+  if (sel.ob.x != -1 && !sel.alt)
 		selmove(n); /* negate change in term.scr */
 	tfulldirt();
 }
@@ -1333,11 +1333,11 @@ tscrollup(int top, int bot, int n, int mode)
 	}
 
 
-	for (i = top; i <= bot-n; i++) {
-		temp = term.line[i];
-		term.line[i] = term.line[i+n];
-		term.line[i+n] = temp;
-	}
+	 for (i = top; i <= bot-n; i++) {
+	 	temp = term.line[i];
+	 	term.line[i] = term.line[i+n];
+	 	term.line[i+n] = temp;
+	 }
 
 	if (sel.ob.x != -1 && sel.alt == alt) {
 		if (!savehist) {

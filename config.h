@@ -4,11 +4,16 @@
  *
  **********************************************************************************/
 
-static char *font    = "Fira Code:pixelsize=14:antialias=true";
 
-static char *font2[] = {
-
+char *fonts[]         = {
+   //"FiraCode NF:style=Regular:pixelsize=14:antialias=true",
 };
+char *font_fallback[] = { 
+  //"JoyPixels:pixelsize=14"
+};
+
+static int   fonts_current   = 0;
+
 
 /**********************************************************************************
  * Appereance
@@ -16,7 +21,6 @@ static char *font2[] = {
 
 static int borderpx  = 17;
 static float cwscale = 0.875;
-//static float chscale = 1.125;
 static float chscale = 0.875;
 float alpha          = 0.8;
 static int ligatures = 1;
@@ -121,9 +125,9 @@ static int bellvolume = 0;
 
 
 // lemme tell you that this is not useless and I find it lovely with a script that randomizes the geometry, ok
-char *float_terminal = "st_float";
+char *float_terminal = "flarity_float";
 // default TERM value
-char *termname = "st-256color";
+char *termname = "flarity-256color";
 
 
 /**********************************************************************************
@@ -233,7 +237,7 @@ static unsigned int mousebg = 0;
 
 
 static unsigned int cols = 100;
-static unsigned int rows = 40;
+static unsigned int rows = 25;
 //unsigned int const buffSize = 255;
 
 
@@ -297,6 +301,7 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
+  { TERMMOD,              XK_S,           cyclefonts,     {.f = 0 } },
 
 
 
