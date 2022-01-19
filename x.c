@@ -2730,10 +2730,10 @@ xrdb_load(void)
 		xrdb = XrmGetStringDatabase(xrm);
 
 		/* handling colors here without macros to do via loop. */
-		char loadValue[12] = "";
+		char loadValue[17] = "";
 		for (int i = 0; i < 256; i++)
 		{
-			sprintf(loadValue, "%s%d", "st.color", i);
+			sprintf(loadValue, "%s%d", "flarity.color", i);
 
 			if(!XrmGetResource(xrdb, loadValue, loadValue, &type, &ret))
 			{
