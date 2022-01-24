@@ -279,7 +279,7 @@ static char *opt_line  = NULL;
 static char *opt_name  = NULL;
 static char *opt_title = NULL;
 
-//static int focused = 0;
+static int focused = 1;
 
 static int oldbutton = 3; /* button event on startup: 3 = release */
 static int cursorblinks = 0;
@@ -813,15 +813,14 @@ xloadcolor(int i, const char *name, Color *ncolor)
 	return XftColorAllocName(xw.dpy, xw.vis, xw.cmap, name, ncolor);
 }
 
-/*void
+void
 xloadalpha(void)
 {
-	float const usedAlpha = focused ? alpha : alphaUnfocused;
 	if (opt_alpha) alpha = strtof(opt_alpha, NULL);
-	dc.col[defaultbg].color.alpha = (unsigned short)(0xffff * usedAlpha);
+	dc.col[defaultbg].color.alpha = (unsigned short)(0xffff * alpha);
 	dc.col[defaultbg].pixel &= 0x00FFFFFF;
-	dc.col[defaultbg].pixel |= (unsigned char)(0xff * usedAlpha) << 24;
-}*/
+	dc.col[defaultbg].pixel |= (unsigned char)(0xff * alpha) << 24;
+}
 
 void
 xloadcols(void)
@@ -846,12 +845,10 @@ xloadcols(void)
 				die("could not allocate color %d\n", i);
 		}
 
+  xloadalpha();
+
 	/* set alpha value of bg color */
-	if (opt_alpha)
-		alpha = strtof(opt_alpha, NULL);
-	dc.col[defaultbg].color.alpha = (unsigned short)(0xffff * alpha);
-	dc.col[defaultbg].pixel &= 0x00FFFFFF;
-	dc.col[defaultbg].pixel |= (unsigned char)(0xff * alpha) << 24;
+  // FIXIT: Crash
 	loaded = 1;
 }
 
@@ -1303,13 +1300,14 @@ xinit(int cols, int rows)
 	if (!FcInit())
 		die("could not init fontconfig.\n");
 
-
 	usedfont = fonts[fonts_current];
 	xloadfonts(usedfont, 0);
+
 
 	/* colors */
 //	xw.cmap = XDefaultColormap(xw.dpy, xw.scr);
 	xw.cmap = XCreateColormap(xw.dpy, parent, xw.vis, None);
+
 	xloadcols();
 
 	/* adjust fixed window geometry */
@@ -2451,12 +2449,12 @@ focus(XEvent *ev)
 		xseturgency(0);
 		if (IS_SET(MODE_FOCUS))
 			ttywrite("\033[I", 3, 0);
-		} else {
-		if (xw.ime.xic)
-			XUnsetICFocus(xw.ime.xic);
-		win.mode &= ~MODE_FOCUSED;
-		if (IS_SET(MODE_FOCUS))
-			ttywrite("\033[O", 3, 0);
+	} else {
+	if (xw.ime.xic)
+		XUnsetICFocus(xw.ime.xic);
+	win.mode &= ~MODE_FOCUSED;
+	if (IS_SET(MODE_FOCUS))
+		ttywrite("\033[O", 3, 0);
 	}
 }
 
@@ -2748,24 +2746,6 @@ xrdb_load(void)
 				colorname[i] = ret.addr;
 		}
 
-    XRESOURCE_LOAD_META("font_fallback") {
-      int count = 0, endchar = fc = sizeof(font_fallback) / sizeof(*font_fallback);
-      for (int i = 0; ret.addr[i]; i++) if (ret.addr[i] == ',') count++;
-      if (count > 0)
-      {
-        for (int i = 0; i <= count; i++)
-        {
-          if (i == 0) font_fallback[endchar + i] = strtok(ret.addr, ",");
-          else        font_fallback[endchar + i] = strtok(NULL, ",");
-          fc++;
-        }
-        font_fallback[endchar + count + 1] = '\0';
-      } else {
-        font_fallback[endchar] = ret.addr;
-        fc++;
-      }
-    }
-
     XRESOURCE_LOAD_META("fonts") {
       int count = 0, endchar = fm = sizeof(fonts) / sizeof(*fonts);
       for (int i = 0; ret.addr[i]; i++) if (ret.addr[i] == ',') count++;
@@ -2781,6 +2761,29 @@ xrdb_load(void)
       } else {
         fonts[endchar] = ret.addr;
         fm++;
+      }
+    }
+    printf("all fonts are: %i\n", fm);
+    printf("font 0: %s\n", fonts[0]);
+    printf("font 1: %s\n", fonts[1]);
+    printf("font 2: %s\n", fonts[2]);
+    printf("font 3: %s\n", fonts[3]);
+
+    XRESOURCE_LOAD_META("font_fallback") {
+      int count = 0, endchar = fc = sizeof(font_fallback) / sizeof(*font_fallback);
+      for (int i = 0; ret.addr[i]; i++) if (ret.addr[i] == ',') count++;
+      if (count > 0)
+      {
+        for (int i = 0; i <= count; i++)
+        {
+          if (i == 0) font_fallback[endchar + i] = strtok(ret.addr, ",");
+          else        font_fallback[endchar + i] = strtok(NULL, ",");
+          fc++;
+        }
+        font_fallback[endchar + count + 1] = '\0';
+      } else {
+        font_fallback[endchar] = ret.addr;
+        fc++;
       }
     }
 
@@ -2922,16 +2925,14 @@ run:
 		opt_cmd = argv;
 
 	if (!opt_title)
-		opt_title = (opt_line || !opt_cmd) ? "st" : opt_cmd[0];
+		opt_title = (opt_line || !opt_cmd) ? "flarity" : opt_cmd[0];
 
-  
 	setlocale(LC_CTYPE, "");
 	XSetLocaleModifiers("");
   xrdb_load();
 	signal(SIGUSR1, reload);
 	cols = MAX(cols, 1);
 	rows = MAX(rows, 1);
-//	defaultbg = MAX(LEN(colorname), 256);
 	tinit(cols, rows);
 	xinit(cols, rows);
 

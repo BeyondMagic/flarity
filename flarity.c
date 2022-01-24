@@ -239,7 +239,6 @@ static void tloaddefscreen(int, int);
 static void tloadaltscreen(int, int);
 static void tsetmode(int, int, const int *, int);
 static int twrite(const char *, int, int);
-static void tfulldirt(void);
 static void tcontrolcode(uchar);
 static void tdectest(char);
 static void tdefutf8(char);
@@ -1263,10 +1262,25 @@ newterm(const Arg* arg)
 		break;
 	case 0:
 		chdir(getcwd_by_pid(pid));
-  	execlp(arg->v, arg->v, NULL);
+    execlp(arg->s, arg->s, NULL);
 		break;
 	}
 }
+
+void
+newtermfloat(const Arg* arg)
+{
+	switch (fork()) {
+	case -1:
+		die("fork failed: %s\n", strerror(errno));
+		break;
+	case 0:
+		chdir(getcwd_by_pid(pid));
+    execlp(arg->s, arg->s, "-t float", NULL);
+		break;
+	}
+}
+
 
 static char *getcwd_by_pid(pid_t pid) {
 	char buf[32];

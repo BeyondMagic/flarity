@@ -6,13 +6,13 @@
 
 
 char *fonts[]         = {
-   //"FiraCode NF:style=Regular:pixelsize=14:antialias=true",
+  "FiraCode NF:style=Regular:pixelsize=14:antialias=true:hinting=true",
 };
 char *font_fallback[] = { 
-  //"JoyPixels:pixelsize=14"
+  "JoyPixels:pixelsize=14"
 };
 
-static int   fonts_current   = 0;
+static int   fonts_current   = 1;
 
 
 /**********************************************************************************
@@ -124,7 +124,7 @@ static int bellvolume = 0;
  **********************************************************************************/
 
 // default TERM value
-char *termname = "st-256color";
+char *termname = "flarity";
 
 
 /**********************************************************************************
@@ -197,7 +197,7 @@ unsigned int defaultbg = 258;
 static unsigned int defaultcs = 256;
 static unsigned int defaultrcs = 257;
 
-//unsigned int bg = 256, bgUnfocused = 256;
+unsigned int bg = 256, bgUnfocused = 256;
 
 
 /**********************************************************************************
@@ -315,8 +315,8 @@ static Shortcut shortcuts[] = {
 //	{ ControlMask|ShiftMask,          XK_Left, ttysend,   {.s = "\033[21;5~\033[23;5~\033[24;5~"} },
 //	{ ControlMask|ShiftMask,          XK_Right, ttysend,  {.s = "\033[24;5~\033[23;5~"} },
 
-  //{ ShiftMask,            XK_BackSpace,   newterm,        {.v = "flarity", .t = "float" } },
-  { ShiftMask,            XK_Return,      newterm,        {.v = "flarity" } },
+  { ShiftMask,            XK_BackSpace,   newtermfloat,   {.s = "flarity" } },
+  { ShiftMask,            XK_Return,      newterm,        {.s = "flarity" } },
 
 
    /*******************************************************************************

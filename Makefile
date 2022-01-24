@@ -50,6 +50,7 @@ install: flarity
 	sed "s/VERSION/$(VERSION)/g" < flarity.1 > $(DESTDIR)$(MANPREFIX)/man1/flarity.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/flarity.1
 	tic -sx flarity.info
+	rm -f *.o
 	@echo Please see the README file regarding the terminfo entry of flarity.
 
 uninstall:
