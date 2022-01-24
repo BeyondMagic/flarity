@@ -96,8 +96,10 @@ typedef union {
 	int i;
 	uint ui;
 	float f;
+  float fi;
+  float fb;
+  float fr;
 	const void *v;
-//  const void *t;
 	const char *s;
 } Arg;
 
