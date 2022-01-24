@@ -1,7 +1,5 @@
 <h1 align="center">flarity - A personal terminal emulator.</h1>
 
-<img align="center" src="/.github/preview.png">
-
 <p align="center">flarity is a fork of st constrained with usability as the main goal of it.</p>
 
 ---
@@ -25,21 +23,21 @@
 
 ## Patches (as far as I remember)
 
-+ [alpha focus highlight](https://st.suckless.org/patches/alpha_focus_highlight/)
-+ [scroll](https://st.suckless.org/patches/scrollback/)
++ [scroll](https://st.suckless.org/patches/scrollback/) custom
 + rows and columns reflow (can resize the terminal and keep content) [custom](https://github.com/BeyondMagic/st/blob/master/patches/columns-rows-reflow-st-unpatched.patch)
-+ [bold](https://st.suckless.org/patches/bold-is-not-bright/)
++ [bold](https://st.suckless.org/patches/bold-is-not-bright/) custom
 + [boxdraw](https://st.suckless.org/patches/boxdraw)
 + [ligatures](https://st.suckless.org/patches/ligatures/)
 + [font2](https://st.suckless.org/patches/font2/)
-+ [newterm](https://st.suckless.org/patches/newterm/) [custom](https://github.com/BeyondMagic/st/blob/master/patches/newterm_custom_argument.patch)
++ [newterm](https://st.suckless.org/patches/newterm/) custom
 + [any geometry](https://st.suckless.org/patches/anygeometry/)
 + [vertcenter](https://st.suckless.org/patches/vertcenter/)
 + [undercurl](https://st.suckless.org/patches/undercurl/)
 + [live-reload-xresources](https://github.com/gnotclub/xst/commit/c0ffcfbaf8af25468103dd92e0c7e83555e08c7a)
 + [blinking-cursor](https://st.suckless.org/patches/blinking_cursor/)
 + [glyph-wide-support](https://github.com/LukeSmithxyz/st/commit/e3b821dcb3511d60341dec35ee05a4a0abfef7f2)
-+ [cyclefonts](https://st.suckless.org/patches/cyclefonts/) custom
++ [cyclefonts](https://st.suckless.org/patches/cyclefonts/) [custom]
++ Set Italic, Bold, and Roman font by XResources [custom]
 
 ---
 
@@ -48,24 +46,20 @@
 Example file:
 
 ```
-! Flarity default config:
-!
-! Fonts:
-!   Coding:           FiraCode NF:                        https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/FiraCode/
-!   Writing:          agave NF:                           https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Agave/
-!   Japanese support: Noto Sans CJK JP                    https://fonts.google.com/noto/specimen/Noto+Sans+JP
-!   Icons support:    Material\\-Design\\-Iconic\\-Font   https://github.com/google/material-design-icons
-!   Emojis support:   JoyPixels                           https://www.joypixels.com/
-!   UNICODE support:  Unifont-JP                          http://unifoundry.com/unifont/
+! FIXIT: Main fonts that can be cycled through. For now, they have to be set on the "config.h" file.
+!flarity.fonts         : FiraCode NF:style=Regular:pixelsize=14:antialias=true,BlexMono NF:style=Book:pixelsize=17:antialias=true
 
-! Cycle main fonts.
-flarity.fonts         : JetBrainsMono Nerd Font:style:medium:pixelsize=15:pixelsize=12.25:antialias=true,agave NF:style=r:pixelsize=17:antialias=true
+! Italic font.
+flarity.italic        : VictorMono NF:style=Bold Italic:pixelsize=14:antialias=true:hinting=true
 
-! Fonts fallback.
-flarity.font_fallback : Noto Sans CJK JP:style=Regular:pixelsize=14:antialias=true,Material\\-Design\\-Iconic\\-Font:style=Design-Iconic-Font:pxelsize=16.25,JoyPixels:pixelsize=14,
+! Bold font.
+flarity.bold          : FiraCode NF:style=Bold:pixelsize=14:antialias=true:hinting=true
 
-! Name of the terminal.
-flarity.termname      : flarity-256color
+! Roman font.
+flarity.roman         : FiraCode NF:style=Bold:pixelsize=14:antialias=true:hinting=true
+
+! FIXIT: Fonts fallback, in case of emojis and/or special icons. For now, they have to be set on the "config.h" file.
+!flarity.font_fallback : Material\\-Design\\-Iconic\\-Font:style=Design-Iconic-Font:pixelsize=16.25
 
 ! Time between blinks of the cursor.
 flarity.blinktimeout  : 500
@@ -111,17 +105,11 @@ kill -USR1 $(pidof flarity)
 + coloured undercurl (apply the flarity.info for external programs)
 	- sequence is 4:3, 4:0 to reset
 + history (default: 2000 lines)
-+ Emojis 
++ Emojis (a.k.a. fallback fonts).
 
 ---
 
-### Fonts
-
-This was configured with Fira Code and Material Design Iconic 2 fonts.
-
----
-
-### Installation<
+### Installation
 
 First, install this package in your system: `libxft-bgra`.
 
@@ -136,4 +124,10 @@ $ flarity
 
 If you want to, edit `config.mk` to match your local setup (flarity is installed into the /usr/local namespace by default).
 
-Then run `tic -x -o ~/.terminfo flarity.info` to have support in multiple terminal programs that use undercurls, ...
+Then run `tic -x -o ~/.terminfo flarity.info` to have support in multiple terminal programs that use undercurls.
+
+---
+
+Screenshots:
+
+<img align="center" src="/.github/1.png">

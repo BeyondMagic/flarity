@@ -13,10 +13,10 @@ char *fonts[]         = {
 // 2. For italics.
 char * font_italic = "VictorMono NF:style=Bold Italic:pixelsize=14:antialias=true:hinting=true";
 
-// 3. For boldness.
+// 3. For boldness italic.
 char * font_bold = "FiraCode NF:style=Regular:pixelsize=14:antialias=true:hinting=true";
 
-// 4. For obliqueness.
+// 4. For boldness.
 char * font_roman = "FiraCode NF:style=Bold:pixelsize=14:antialias=true:hinting=true";
 
 // 5. For fallback.
