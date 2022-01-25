@@ -173,3 +173,6 @@ extern unsigned int defaultbg;
 extern float alpha, alphaUnfocused;
 extern const int boxdraw, boxdraw_bold, boxdraw_braille;
 //extern float alpha, alphaUnfocused;
+
+// Open URL on browesr and highlight on hover.
+void openUrlOnClick(int, int, char *);

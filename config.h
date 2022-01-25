@@ -1,8 +1,5 @@
-/**********************************************************************************
- * thinking in possible future patches:
- *   https://pastebin.com/KMcCNxXT
- *
- **********************************************************************************/
+// 1. URL Opener. Will be used along "openUrlOnClick".
+static char *url_opener = "xdg-open";
 
 // 1. To cycle through.
 char *fonts[]         = {
@@ -21,7 +18,8 @@ char * font_roman = "FiraCode NF:style=Bold:pixelsize=14:antialias=true:hinting=
 
 // 5. For fallback.
 char *font_fallback[] = {
-  "JoyPixels:pixelsize=14"
+  "JoyPixels:pixelsize=14",
+  "Noto Sans CJK JP:pixelsize=14:antialias=true:hinting=true",
 };
 
 static int   fonts_current   = 0;

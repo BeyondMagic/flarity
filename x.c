@@ -732,8 +732,10 @@ brelease(XEvent *e)
 
   if (mouseaction(e, 1))
     return;
-  if (e->xbutton.button == Button1)
+  if (e->xbutton.button == Button1) {
     mousesel(e, 1);
+    openUrlOnClick(evcol(e), evrow(e), url_opener);
+  }
 }
 
 void
@@ -852,7 +854,6 @@ xloadcols(void)
   xloadalpha();
 
   /* set alpha value of bg color */
-  // FIXIT: Crash
   loaded = 1;
 }
 
@@ -1961,7 +1962,7 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
    r.x = 0;
    r.y = 0;
    r.height = win.ch + 2;
-   r.width = width;
+   //r.width = width;
    XftDrawSetClipRectangles(xw.draw, winx, winy, &r, 1);
 
 
