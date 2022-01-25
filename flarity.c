@@ -3236,6 +3236,11 @@ openUrlOnClick(int col, int row, char* url_opener)
     strcpy(last_url, "");
 
     // E. Clean underline and colour of the url.
+    for (int i = col_start - strlen(url); i < col_start; i++) {
+
+      term.line[row_start][i].mode = ATTR_NULL;
+
+    }
 
   } else {
 
@@ -3243,9 +3248,13 @@ openUrlOnClick(int col, int row, char* url_opener)
     strcpy(last_url, url);
 
     // B. Colorize the url and apply underline.
-    url_index = 0;
+    for (int i = col_start - strlen(url); i < col_start; i++) {
 
-    //term.line[row_start][col_start].fg = 0x00FFFFFF;
+      term.line[row_start][i].mode ^= ATTR_ITALIC;
+      term.line[row_start][i].mode ^= ATTR_UNDERLINE;
+
+    }
+
 
   }
 }
