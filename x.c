@@ -1961,7 +1961,7 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
    /* Set the clip region because Xft is sometimes dirty. */
    r.x = 0;
    r.y = 0;
-   r.height = win.ch + 2;
+   r.height = win.ch;
    //r.width = width;
    XftDrawSetClipRectangles(xw.draw, winx, winy, &r, 1);
 

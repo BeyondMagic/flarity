@@ -4,7 +4,8 @@ static char *url_opener = "xdg-open";
 // 1. To cycle through.
 char *fonts[]         = {
   "FiraCode NF:style=Regular:pixelsize=14:antialias=true:hinting=true",
-  "agave NF:style=r:pixelsize=17:antialias=true:hinting=true"
+//  "agave NF:style=r:pixelsize=17:antialias=true:hinting=true",
+  "Comic Mono:style=Normal:pixelsize=16:antialias=true:hinting=true",
 };
 
 // 2. For italics.
