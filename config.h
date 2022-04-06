@@ -1,27 +1,31 @@
-// 1. URL Opener. Will be used along "openUrlOnClick".
+// URL Opener. Will be used along "openUrlOnClick".
 static char *url_opener = "xdg-open";
 
-// 1. To cycle through.
+// To cycle through.
 char *fonts[]         = {
   "FiraCode NF:style=Regular:pixelsize=14:antialias=true:hinting=true",
 //  "agave NF:style=r:pixelsize=17:antialias=true:hinting=true",
   "Comic Mono:style=Normal:pixelsize=16:antialias=true:hinting=true",
 };
 
-// 2. For italics.
+// For italics.
 char * font_italic = "VictorMono NF:style=Bold Italic:pixelsize=14:antialias=true:hinting=true";
 
-// 3. For boldness italic.
+// For boldness italic.
 char * font_bold = "FiraCode NF:style=Regular:pixelsize=14:antialias=true:hinting=true";
 
-// 4. For boldness.
+// For boldness.
 char * font_roman = "FiraCode NF:style=Bold:pixelsize=14:antialias=true:hinting=true";
 
-// 5. For fallback.
+// For fallback.
 char *font_fallback[] = {
   "JoyPixels:pixelsize=14",
   "Noto Sans CJK JP:pixelsize=14:antialias=true:hinting=true",
 };
+
+// Plumbing selection.
+//static char *plumb_cmd = "plumb";
+static char *plumb_cmd[] = {"plumb.sh", NULL, NULL};
 
 static int   fonts_current   = 0;
 

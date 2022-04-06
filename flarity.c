@@ -27,6 +27,9 @@
 #elif defined(__FreeBSD__) || defined(__DragonFly__)
  #include <libutil.h>
 #endif
+#if defined(__OpenBSD__)
+ #include <sys/sysctl.h>
+#endif
 
 /* Arbitrary sizes */
 #define UTF_INVALID   0xFFFD
@@ -281,6 +284,23 @@ static uchar utfmask[UTF_SIZ + 1] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8};
 static Rune utfmin[UTF_SIZ + 1] = {       0,    0,  0x80,  0x800,  0x10000};
 static Rune utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF};
 
+int
+subprocwd(char *path)
+{
+#if   defined(__linux)
+	if (snprintf(path, PATH_MAX, "/proc/%d/cwd", pid) < 0)
+		return -1;
+	return 0;
+#elif defined(__OpenBSD__)
+	size_t sz = PATH_MAX;
+	int name[3] = {CTL_KERN, KERN_PROC_CWD, pid};
+	if (sysctl(name, 3, path, &sz, 0, 0) == -1)
+		return -1;
+	return 0;
+#endif
+}
+
+
 ssize_t
 xwrite(int fd, const char *s, size_t len)
 {
@@ -398,18 +418,11 @@ utf8validate(Rune *u, size_t i)
 }
 
 static const char base64_digits[] = {
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0,
-	63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, -1, 0, 0, 0, 0, 1,
-	2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-	22, 23, 24, 25, 0, 0, 0, 0, 0, 0, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-	35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	[43] = 62, 0, 0, 0, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61,
+		0, 0, 0, -1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+		13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0, 0, 0, 0,
+		0, 0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+		40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
 };
 
 char
@@ -884,14 +897,14 @@ ttynew(char *line, char *cmd, char *out, char **args)
 		close(s);
 		close(m);
 #ifdef __OpenBSD__
-		if (pledge("stdio getpw proc exec", NULL) == -1)
+		if ( pledge("stdio getpw proc exec", NULL) == -1)
 			die("pledge\n");
 #endif
 		execsh(cmd, args);
 		break;
 	default:
 #ifdef __OpenBSD__
-		if (pledge("stdio rpath tty proc", NULL) == -1)
+		if (pledge("stdio rpath tty proc ps exec", NULL) == -1)
 			die("pledge\n");
 #endif
 		close(s);
