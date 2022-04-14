@@ -2065,7 +2065,7 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
       // Underline Style
       if (base.ustyle != 3) {
         XFillRectangle(xw.dpy, XftDrawDrawable(xw.draw), ugc, winx,
-          winy + dc.font.ascent * chscale + 1, width, wlw);
+          winy + dc.font.ascent * chscale + 2, width, wlw);
       } else if (base.ustyle == 3) {
         int ww = win.cw;//width;
         int wh = dc.font.descent - wlw/2 - 1;//r.height/7;

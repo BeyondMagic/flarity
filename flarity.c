@@ -1361,7 +1361,6 @@ tscrollup(int top, int bot, int n, int mode)
 		tsetdirt(top+n, bot);
 	}
 
-
 	 for (i = top; i <= bot-n; i++) {
 	 	temp = term.line[i];
 	 	term.line[i] = term.line[i+n];
@@ -3147,12 +3146,28 @@ draw(void)
 	if (term.line[term.c.y][cx].mode & ATTR_WDUMMY)
 		cx--;
 
+  int temp = term.c.y;
+
 	drawregion(0, 0, term.col, term.row);
+  //printf("1: term.c.y: %i term.row-1: %i cx: %i term.ocy: %i term.src: %i\n",
+  //        term.c.y,
+  //        term.row-1,
+  //        cx,
+  //        term.ocy,
+  //        term.scr);
+  // term.src > 0           means that history is being show.
+  // term.src == 0          means that history is not being show.
+  // term.c.y != term.row-1 means that it is not on the last line.
+  //if (term.scr != 0) term.c.y = temp + term.scr;
+  //if (term.c.y == term.row) term.c.y = term.row - 1;
+
     xdrawcursor(cx, term.c.y, term.line[term.c.y][cx],
 			term.ocx, term.ocy, term.line[term.ocy][term.ocx],
 			term.line[term.ocy], term.col);
+
 	term.ocx = cx;
-	term.ocy = term.c.y;
+	term.ocy = term.c.y = temp;
+
 	xfinishdraw();
 	if (ocx != term.ocx || ocy != term.ocy)
 		xximspot(term.ocx, term.ocy);

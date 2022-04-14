@@ -17,13 +17,13 @@ command="$(echo "
 $icons/copy.svg\tコピー\tcopyq copy
 
 $icons/internet.svg\tで開く
-\t$icons/firefox.svg\tFirefox
-\t$icons/brave.svg\tBrave
+\t$icons/firefox.svg\tFirefox\tfirefox
+\t$icons/brave.svg\tBrave\tbrave
 \t
-\t$icons/telegram.svg\tTelegram
-\t$icons/world-download.svg\tTorrent Client
-\t$icons/nsxiv.svg\tImage Viewer
-\t$icons/mpv.svg\tVideo Player
+\t$icons/telegram.svg\tTelegram\ttelegram
+\t$icons/world-download.svg\tTorrent Client\tqbittorrent
+\t$icons/nsxiv.svg\tImage Viewer\tnsxiv
+\t$icons/mpv.svg\tVideo Player\tmpv
 \t
 \t$icons/file-upload.svg\tUpload to AnonFiles\tupload
 

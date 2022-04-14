@@ -236,7 +236,7 @@ unsigned int bg = 256, bgUnfocused = 256;
 
 
 static unsigned int cursorshape = 5;
-static Rune stcursor = 0x2603; /* snowman (U+2603) */
+static Rune stcursor = 0x26F6; /* a main (U+2603) */
 
 static unsigned int mouseshape = XC_xterm;
 static unsigned int mousefg = 7;
