@@ -1248,24 +1248,30 @@ kscrolldown(const Arg* a)
 void
 kscrollup(const Arg* a)
 {
-	int n = a->i;
+  int n = a->i;
 
-	if (!term.histf || IS_SET(MODE_ALTSCREEN))
-		return;
+  // 1. To not run when:
+  //    I. If there isn't any history to scroll.
+  //    II. If the screen is in alt mode.
+  if (!term.histf || IS_SET(MODE_ALTSCREEN))
+    return;
 
-	if (n < 0)
-		n = MAX(term.row / -n, 1);
+  //printf("n: %d", n);
 
-	if (term.scr + n <= term.histf) {
-		term.scr += n;
-	} else {
-		n = term.histf - term.scr;
-		term.scr = term.histf;
-	}
+  // 1. 
+  if (n < 0)
+    n = MAX(term.row / -n, 1);
+
+  if (term.scr + n <= term.histf) {
+    term.scr += n;
+  } else {
+    n = term.histf - term.scr;
+    term.scr = term.histf;
+  }
 
   if (sel.ob.x != -1 && !sel.alt)
-		selmove(n); /* negate change in term.scr */
-	tfulldirt();
+    selmove(n); /* negate change in term.scr */
+  tfulldirt();
 }
 
 void

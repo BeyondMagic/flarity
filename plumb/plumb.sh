@@ -25,7 +25,7 @@ $icons/internet.svg\tで開く
 \t$icons/nsxiv.svg\tImage Viewer\tnsxiv
 \t$icons/mpv.svg\tVideo Player\tmpv
 \t
-\t$icons/file-upload.svg\tUpload to AnonFiles\tupload
+\t$icons/file-upload.svg\tUpload to AnonFiles\tanonfiles-upload
 
 $icons/eye.svg\tIrís
 \t$icons/world-1.svg\t日本語
@@ -44,7 +44,7 @@ $icons/eye.svg\tIrís
 \t\t\t$icons/usa.svg\tInglês\ttranslate pt en
 \t\t$icons/book.svg\tDefinição\tdefinition pt
 " \
-| sed -re '1d;$d' | xmenu)"
+| sed -re '1d;$d' | $HOME/Git/Forking/xmenu/xmenu)"
 
 # II. Execute command in fly.
 eval "$command" "$1"
