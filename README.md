@@ -46,8 +46,7 @@
 Example file:
 
 ```
-! FIXIT: Main fonts that can be cycled through. For now, they have to be set on the "config.h" file.
-!flarity.fonts         : FiraCode NF:style=Regular:pixelsize=14:antialias=true,BlexMono NF:style=Book:pixelsize=17:antialias=true
+flarity.fonts         : FiraCode NF:style=Regular:pixelsize=14:antialias=true,BlexMono NF:style=Book:pixelsize=17:antialias=true
 
 ! Italic font.
 flarity.italic        : VictorMono NF:style=Bold Italic:pixelsize=14:antialias=true:hinting=true
@@ -58,8 +57,7 @@ flarity.bold          : FiraCode NF:style=Bold:pixelsize=14:antialias=true:hinti
 ! Roman font.
 flarity.roman         : FiraCode NF:style=Bold:pixelsize=14:antialias=true:hinting=true
 
-! FIXIT: Fonts fallback, in case of emojis and/or special icons. For now, they have to be set on the "config.h" file.
-!flarity.font_fallback : Material\\-Design\\-Iconic\\-Font:style=Design-Iconic-Font:pixelsize=16.25
+flarity.font_fallback : Material\\-Design\\-Iconic\\-Font:style=Design-Iconic-Font:pixelsize=16.25
 
 ! Time between blinks of the cursor.
 flarity.blinktimeout  : 500

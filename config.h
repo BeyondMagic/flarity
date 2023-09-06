@@ -2,7 +2,7 @@
 static char *url_opener = "xdg-open";
 
 // To cycle through.
-char *fonts[]         = {
+char *fonts_default[]         = {
 	"VictorMono NF:style=Medium:pixelsize=19:antialias=true:hinting=true",
 	// "FiraCode NF:style=Regular:pixelsize=14:antialias=true:hinting=true",
 	//"agave NF:style=r:pixelsize=17:antialias=true:hinting=true",
@@ -19,7 +19,7 @@ char *font_bold = "FiraCode NF:style=Regular:pixelsize=19:antialias=true:hinting
 char *font_roman = "FiraCode NF:style=Bold:pixelsize=19:antialias=true:hinting=true";
 
 // For fallback.
-char *font_fallback[] = {
+char *fallback_default[] = {
 	"Noto Color Emoji:style=Regular:pixelsize=18",
 	//"JoyPixels:style=Regular:pixelsize=23",
 	"Noto Sans CJK JP:pixelsize=19:antialias=true:hinting=true",

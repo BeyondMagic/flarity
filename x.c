@@ -80,8 +80,10 @@ static void cyclefonts(const Arg *);
 #define TITLESTACKSIZE 8
 
 /* Calculate count of spare fonts */
-int fc = sizeof(font_fallback) / sizeof(*font_fallback);
-int fm = sizeof(fonts) / sizeof(*fonts);
+int fc = sizeof(fallback_default) / sizeof(*fallback_default);
+int fm = sizeof(fonts_default) / sizeof(*fonts_default);
+char ** fonts;
+char ** fallback;
 
 /* XEMBED messages */
 #define XEMBED_FOCUS_IN  4
@@ -1054,18 +1056,17 @@ xloadfont(Font *f, FcPattern *pattern)
 	return 0;
 }
 
-	void
+void
 cyclefonts(const Arg *dummy)
 {
 	zoomreset(dummy);
 	fonts_current++;
-	if (fonts_current >= fm) fonts_current = 0;
+	if (fonts_current > fm)
+		fonts_current = 0;
 	usedfont = fonts[fonts_current];
-	xloadfonts(usedfont, font_italic, font_bold, font_roman,
-			0,         0,           0,         0);
+	xloadfonts(usedfont, font_italic, font_bold, font_roman, 0, 0, 0, 0);
 	cresize(win.w, win.h);
 	redraw();
-
 }
 
 // # Fonts handling functions.
@@ -1421,7 +1422,7 @@ xloadsparefonts(void)
 		frc = xrealloc(frc, frccap * sizeof(Fontcache));
 	}
 
-	for (fp = font_fallback; fp - font_fallback < fc; ++fp) {
+	for (fp = fallback; fp - fallback < fc; ++fp) {
 
 		if (**fp == '-')
 			pattern = XftXlfdParse(*fp, False, False);
@@ -2992,7 +2993,7 @@ run(void)
 	XRESOURCE_LOAD_META(NAME)    \
 	DST = strtof(ret.addr, NULL);
 
-	void
+void
 xrdb_load(void)
 {
 	/* XXX */
@@ -3030,43 +3031,63 @@ xrdb_load(void)
 				colorname[i] = ret.addr;
 		}
 
-		//XRESOURCE_LOAD_META("fonts") {
-		//  int count = 0, endchar = fm = sizeof(fonts) / sizeof(*fonts);
-		//  for (int i = 0; ret.addr[i]; i++) if (ret.addr[i] == ',') count++;
-		//  if (count > 0)
-		//  {
-		//    for (int i = 0; i <= count; i++)
-		//    {
-		//      if   (i == 0) fonts[endchar + i] = strtok(ret.addr, ",");
-		//      else          fonts[endchar + i] = strtok(NULL, ",");
-		//      fm++;
-		//    }
-		//    fonts[endchar + count + 1] = '\0';
-		//  } else {
-		//    fonts[endchar] = ret.addr;
-		//    fm++;
-		//  }
-		//}
+		{
+			static const size_t MAX_CHARS = 150;
+			XRESOURCE_LOAD_META("fonts")
+			{
+				size_t t = strlen(ret.addr), fm = 1;
 
-		// FIXIT: refactor terrible implementation of memory string overwritten. Literally causes distress for the whole program.
+				for (size_t i = 0; ret.addr[i]; ++i)
+					if (ret.addr[i] == ',')
+						fm++;
 
-		//XRESOURCE_LOAD_META("font_fallback") {
-		//  int count = 0, endchar = fc = sizeof(font_fallback) / sizeof(*font_fallback);
-		//  for (int i = 0; ret.addr[i]; i++) if (ret.addr[i] == ',') count++;
-		//  if (count > 0)
-		//  {
-		//    for (int i = 0; i <= count; i++)
-		//    {
-		//      if (i == 0) font_fallback[endchar + i] = strtok(ret.addr, ",");
-		//      else        font_fallback[endchar + i] = strtok(NULL, ",");
-		//      fc++;
-		//    }
-		//    font_fallback[endchar + count + 1] = '\0';
-		//  } else {
-		//    font_fallback[endchar] = ret.addr;
-		//    fc++;
-		//  }
-		//}
+				fonts = malloc(sizeof(char *) * fm);
+				for (size_t i = 0, j = 0; i < fm; ++i)
+				{
+					fonts[i] = malloc(sizeof(char) * MAX_CHARS);
+
+					size_t m = 0;
+					for (; ret.addr[j] && ret.addr[j] != ','; ++j, ++m)
+						fonts[i][m] = ret.addr[j];
+					fonts[i][m] = '\0';
+					++j;
+				}
+			} else {
+				fonts = malloc(sizeof(char *) * fm);
+				for (size_t i = 0; i < fm; ++i)
+				{
+					fonts[i] = malloc(sizeof(char) * MAX_CHARS);
+					strcpy(fonts[i], fonts_default[i]);
+				}
+			}
+
+			XRESOURCE_LOAD_META("font_fallback") {
+				size_t t = strlen(ret.addr), fc = 1;
+
+				for (size_t i = 0; ret.addr[i]; ++i)
+					if (ret.addr[i] == ',')
+						++fc;
+
+				fallback = malloc(sizeof(char *) * fc);
+				for (size_t i = 0, j = 0; i < fc; ++i)
+				{
+					fallback[i] = malloc(sizeof(char) * MAX_CHARS);
+
+					size_t m = 0;
+					for (; ret.addr[j] && ret.addr[j] != ','; ++j, ++m)
+						fallback[i][m] = ret.addr[j];
+					fallback[i][m] = '\0';
+					++j;
+				}
+			} else {
+				fallback = malloc(sizeof(char *) * fc);
+				for (size_t i = 0; i < fc; ++i)
+				{
+					fallback[i] = malloc(sizeof(char) * MAX_CHARS);
+					strcpy(fallback[i], fallback_default[i]);
+				}
+			}
+		}
 
 		// I. Fonts.
 		{
@@ -3230,6 +3251,13 @@ run:
 	xsetenv();
 	selinit();
 	run();
+	for (size_t i = 0; i < fm; ++i)
+		free(fonts[i]);
+	free(fonts);
+
+	for (size_t i = 0; i < fc; ++i)
+		free(fallback[i]);
+	free(fallback);
 
 	return 0;
 }
