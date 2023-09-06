@@ -46,18 +46,21 @@
 Example file:
 
 ```
-flarity.fonts         : FiraCode NF:style=Regular:pixelsize=14:antialias=true,BlexMono NF:style=Book:pixelsize=17:antialias=true
+! Main fonts that can be cycled through.
+flarity.fonts         : VictorMono NF:style=Medium:pixelsize=19:antialias=true:hinting=true,FiraCode NF:style=Regular:pixelsize=19:antialias=true
 
 ! Italic font.
-flarity.italic        : VictorMono NF:style=Bold Italic:pixelsize=14:antialias=true:hinting=true
+flarity.italic        : VictorMono NF:style=Bold Italic:pixelsize=19:antialias=true:hinting=true
+!flarity.italic        : Cartograph CF:style=Italic:pixelsize=14.5:antialias=true:hinting=true
 
 ! Bold font.
-flarity.bold          : FiraCode NF:style=Bold:pixelsize=14:antialias=true:hinting=true
+flarity.bold          : FiraCode NF:style=Bold:pixelsize=19:antialias=true:hinting=true
 
 ! Roman font.
-flarity.roman         : FiraCode NF:style=Bold:pixelsize=14:antialias=true:hinting=true
+flarity.roman         : JetBrainsMono Nerd Font:style=Bold:pixelsize=19:antialias=true:hinting=true
 
-flarity.font_fallback : Material\\-Design\\-Iconic\\-Font:style=Design-Iconic-Font:pixelsize=16.25
+! Fonts fallback, in case of emojis and special icons.
+flarity.font_fallback : Noto Sans CJK JP:pixelsize=19:antialias=true:hinting=true,Noto Color Emoji:style=Regular:pixelsize=18,Material\\-Design\\-Iconic\\-Font:style=Design-Iconic-Font:pixelsize=16.25
 
 ! Time between blinks of the cursor.
 flarity.blinktimeout  : 500
@@ -72,7 +75,7 @@ flarity.padding       : 16
 flarity.cursorshape   : 5
 
 ! Character width scale.
-flarity.cwscale       : 0.876
+flarity.cwscale       : 0.975
 
 ! Character height scale.
 flarity.chscale       : 0.925
