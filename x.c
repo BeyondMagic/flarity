@@ -1089,10 +1089,12 @@ xloadfonts (char *fontstr, char*fontstr_italics, char*fontstr_bold, char*fontstr
 	double fontval_bold;
 	double fontval_roman; // oblique, roman, etc,
 
+	/*
 	printf("[xloadfonts] default font: \"%s\"\n", fontstr);
 	printf("[xloadfonts] italics font: \"%s\"\n", fontstr_italics);
 	printf("[xloadfonts] bold font:    \"%s\"\n", fontstr_bold);
 	printf("[xloadfonts] roman font:   \"%s\"\n", fontstr_roman);
+	*/
 
 	// 3. Default font initializing pattern.
 	{
@@ -1377,8 +1379,7 @@ xloadfonts (char *fontstr, char*fontstr_italics, char*fontstr_bold, char*fontstr
 	}
 }
 
-	int
-xloadsparefont(FcPattern *pattern, int flags)
+int xloadsparefont(FcPattern *pattern, int flags)
 {
 	FcPattern *match;
 	FcResult result;
