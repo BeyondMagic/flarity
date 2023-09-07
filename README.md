@@ -132,3 +132,4 @@ Then run `tic -x -o ~/.terminfo flarity.info` to have support in multiple termin
 Screenshots:
 
 <img align="center" src="/.github/1.png">
+<img align="center" src="/.github/2.png">
